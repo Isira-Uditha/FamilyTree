@@ -51,24 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onPressed: () {},
               child: Text(
-                'Family',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {},
-              child: Text(
                 'Member',
                 style: TextStyle(fontSize: 20),
               ),
@@ -88,6 +70,24 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {},
               child: Text(
                 'Generation',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+              height: 10.0,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0),
+                ),
+                primary: Color.fromRGBO(28, 136, 231, 0.8),
+                fixedSize: Size(200, 100),
+              ),
+              onPressed: () {},
+              child: Text(
+                'History',
                 style: TextStyle(fontSize: 20),
               ),
             ),
