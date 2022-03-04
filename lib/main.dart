@@ -1,3 +1,4 @@
+import 'package:family_tree/screens/family/family_tree.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -49,7 +50,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 primary: Color.fromRGBO(28, 136, 231, 0.8),
                 fixedSize: Size(200, 100),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Family(),
+                  ),
+                );
+              },
               child: Text(
                 'Member',
                 style: TextStyle(fontSize: 20),
