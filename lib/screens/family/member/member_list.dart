@@ -1,3 +1,4 @@
+import 'package:family_tree/components/family/list_view.dart';
 import 'package:family_tree/screens/family/member/add_member.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,11 @@ class MemberList extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Padding(
-              padding: EdgeInsets.only(right:double.infinity),
-              child: Icon(Icons.add,size: 30.0,),
+              padding: EdgeInsets.only(right: double.infinity),
+              child: Icon(
+                Icons.add,
+                size: 30.0,
+              ),
             ),
             onPressed: () {
               Navigator.of(context).push(
@@ -32,13 +36,7 @@ class MemberList extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          ],
-        ),
-      ),
+      body: const MemberListView(),
     );
   }
 }
