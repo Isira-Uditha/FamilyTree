@@ -34,6 +34,7 @@ class _MemberListViewState extends State<MemberListView> {
                 String dob = member['dob'];
                 String relationship = member['relationship'];
                 String description = member['description'];
+                String image = member['image'] ?? "";
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -41,13 +42,15 @@ class _MemberListViewState extends State<MemberListView> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>  EditMemberScreen(
-                              currentDocId: docId,
-                              currentName: name,
-                              currentDob: dob,
-                              currentAge: age,
-                              currentRelationship: relationship,
-                              currentDescription: description),
+                          builder: (context) => EditMemberScreen(
+                            currentDocId: docId,
+                            currentName: name,
+                            currentDob: dob,
+                            currentAge: age,
+                            currentRelationship: relationship,
+                            currentDescription: description,
+                            currentImage: image,
+                          ),
                         ),
                       );
                     },
@@ -78,11 +81,13 @@ class _MemberListViewState extends State<MemberListView> {
                                     await Member.deleteMember(docId: docId);
                                     setState(() {
                                       _isDeleted = false;
-                                      Provider.of<MemberProvider>(context, listen: false)
+                                      Provider.of<MemberProvider>(context,
+                                              listen: false)
                                           .alert(
-                                          title: 'Successfully Deleted',
-                                          body: 'Record has been successfully deleted',
-                                          context: context);
+                                              title: 'Successfully Deleted',
+                                              body:
+                                                  'Record has been successfully deleted',
+                                              context: context);
                                     });
                                   },
                                 )),

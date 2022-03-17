@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/providers/member_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AddMemberForm extends StatefulWidget {
   final FocusNode nameFocusNode;
@@ -28,6 +31,7 @@ class AddMemberForm extends StatefulWidget {
 class _AddMemberFormState extends State<AddMemberForm> {
   final _addMemberFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
+  bool _isUploding = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
@@ -52,6 +56,29 @@ class _AddMemberFormState extends State<AddMemberForm> {
   String getRelationship = "";
   String getDescription = "";
 
+  XFile? _image;
+
+  Future getImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final image = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+
+  }
+
+  Future uploadImage() async {
+    String fileName = basename(_image!.path);
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child('uploads/$fileName');
+    UploadTask uploadTask = ref.putFile(File(_image!.path));
+    uploadTask.then((res) {
+      res.ref.getDownloadURL();
+    });
+    return 'uploads/$fileName';
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -63,6 +90,47 @@ class _AddMemberFormState extends State<AddMemberForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 100,
+                    backgroundColor: Colors.blue,
+                    child: ClipOval(
+                      child: SizedBox(
+                        width: 180.0,
+                        height: 180.0,
+                        child: (_image == null)
+                            ? Image.network(
+                                "https://picsum.photos/250?image=9",
+                                fit: BoxFit.fill,
+                              )
+                            : Image.file(
+                                File(_image!.path),
+                                fit: BoxFit.fill,
+                              ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 60.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _isUploding = true;
+                        });
+
+                        await getImage();
+                      },
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 15.0),
               const Text(
                 "Member Name",
                 style: TextStyle(
@@ -137,7 +205,7 @@ class _AddMemberFormState extends State<AddMemberForm> {
                 },
               ),
               const SizedBox(height: 8.0),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               const Text(
                 "Age",
                 style: TextStyle(
@@ -198,7 +266,7 @@ class _AddMemberFormState extends State<AddMemberForm> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               const Text(
                 "Description",
                 style: TextStyle(
@@ -239,18 +307,28 @@ class _AddMemberFormState extends State<AddMemberForm> {
                         _isProcessing = true;
                       });
 
+                      String imagePath = '';
+
+                      if(_isUploding){
+                        imagePath = await uploadImage();
+                      }
+
                       Member newMember = Member(
                           name: getName,
                           dob: getDob,
                           age: getAge,
                           relationship: getRelationship,
-                          description: getDescription);
+                          description: getDescription,
+                          image: imagePath,
+                      );
 
                       await Member.addMember(newMember);
 
                       setState(() async {
                         _isProcessing = false;
-                         Provider.of<MemberProvider>(context, listen: false)
+                        _isUploding = false;
+
+                        Provider.of<MemberProvider>(context, listen: false)
                             .alert(
                                 title: 'Successfully Inserted',
                                 body: 'Record has been successfully inserted',
@@ -261,11 +339,13 @@ class _AddMemberFormState extends State<AddMemberForm> {
                     }
                   },
                   style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
-                  child: (!_isProcessing)? Text('Save') : const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.redAccent,
-                    ),
-                  ),
+                  child: (!_isProcessing)
+                      ? const Text('Save')
+                      : const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.redAccent,
+                          ),
+                        ),
                 ),
               )
             ],

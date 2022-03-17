@@ -10,6 +10,7 @@ class Member {
   final String age;
   final String relationship;
   final String description;
+  final String image;
 
   const Member({
     this.docId,
@@ -18,6 +19,7 @@ class Member {
     required this.age,
     required this.relationship,
     required this.description,
+    required this.image,
   });
 
 
@@ -31,6 +33,7 @@ class Member {
       "age": member.age,
       "relationship": member.relationship,
       "description": member.description,
+      "image": member.image
     };
 
     await documentReference
@@ -55,6 +58,7 @@ class Member {
       "age": member.age,
       "relationship": member.relationship,
       "description": member.description,
+      "image": member.image,
     };
 
     await documentReference
