@@ -87,7 +87,7 @@ class _EditMemberFormState extends State<EditMemberForm> {
   Future<Widget> _getImage(BuildContext context, String image) async {
     Image m = const Image(
       image: AssetImage('assets/user.png'),
-      fit: BoxFit.fill,
+      fit: BoxFit.cover,
     );
 
     if (widget.member.image != '') {
@@ -95,7 +95,7 @@ class _EditMemberFormState extends State<EditMemberForm> {
           .then((downloadUrl) {
         m = Image.network(
           downloadUrl.toString(),
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         );
       });
     }
@@ -106,9 +106,9 @@ class _EditMemberFormState extends State<EditMemberForm> {
     'My Self',
     'Father',
     'Mother',
-    'Paternal Grandfather',
+    'Paternal GrandFather',
     'Paternal GrandMother',
-    'Maternal Grandfather',
+    'Maternal GrandFather',
     'Maternal GrandMother',
     'Father\'s Siblings',
     'Mother\'s Siblings',
@@ -144,7 +144,7 @@ class _EditMemberFormState extends State<EditMemberForm> {
                                     ? snapshot.data
                                     : Image.file(
                                         File(_image!.path),
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.cover,
                                       ),
                               ),
                             ),
@@ -372,13 +372,13 @@ class _EditMemberFormState extends State<EditMemberForm> {
                               setState(() {
                                 _isProcessing = false;
                                 _isUploding = false;
-                                Provider.of<MemberProvider>(context,
-                                        listen: false)
-                                    .alert(
-                                        title: 'Successfully Updated',
-                                        body:
-                                            'Record has been successfully updated',
-                                        context: context);
+                                Provider.of<MemberProvider>(
+                                  context,
+                                  listen: false,
+                                ).alert(
+                                    title: 'Successfully Updated',
+                                    body: 'Record has been successfully updated',
+                                    context: context);
                               });
                             } else {
                               print(0);

@@ -65,7 +65,6 @@ class _AddMemberFormState extends State<AddMemberForm> {
     setState(() {
       _image = image;
     });
-
   }
 
   Future uploadImage() async {
@@ -89,7 +88,7 @@ class _AddMemberFormState extends State<AddMemberForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -101,13 +100,13 @@ class _AddMemberFormState extends State<AddMemberForm> {
                         width: 180.0,
                         height: 180.0,
                         child: (_image == null)
-                            ? Image.network(
-                                "https://picsum.photos/250?image=9",
-                                fit: BoxFit.fill,
+                            ? const Image(
+                                image: AssetImage('assets/user.png'),
+                                fit: BoxFit.cover,
                               )
                             : Image.file(
                                 File(_image!.path),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                       ),
                     ),
@@ -176,7 +175,7 @@ class _AddMemberFormState extends State<AddMemberForm> {
                 onSaved: (String? value) {},
                 textInputAction: TextInputAction.done,
                 onTap: () async {
-                  FocusScope.of(context).requestFocus(new FocusNode());
+                  FocusScope.of(context).requestFocus(FocusNode());
                   DateTime? newDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
@@ -309,17 +308,17 @@ class _AddMemberFormState extends State<AddMemberForm> {
 
                       String imagePath = '';
 
-                      if(_isUploding){
+                      if (_isUploding) {
                         imagePath = await uploadImage();
                       }
 
                       Member newMember = Member(
-                          name: getName,
-                          dob: getDob,
-                          age: getAge,
-                          relationship: getRelationship,
-                          description: getDescription,
-                          image: imagePath,
+                        name: getName,
+                        dob: getDob,
+                        age: getAge,
+                        relationship: getRelationship,
+                        description: getDescription,
+                        image: imagePath,
                       );
 
                       await Member.addMember(newMember);

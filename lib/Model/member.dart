@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('family');
@@ -46,6 +47,14 @@ class Member {
     CollectionReference memberCollection =
         _mainCollection.doc('1').collection('member');
     return memberCollection.snapshots();
+  }
+
+  static Stream<QuerySnapshot> readByRelationship(String relationship) {
+    return _mainCollection.doc('1').collection('member').where("relationship", isEqualTo: relationship).snapshots();
+  }
+
+  static Stream<QuerySnapshot> readSiblings(String relationship) {
+    return _mainCollection.doc('1').collection('member').where("relationship", isEqualTo: relationship).snapshots();
   }
 
   static Future<void> updateMember(Member member) async {

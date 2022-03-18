@@ -45,6 +45,9 @@ dependencies:
   path: ^1.8.0
   permission_handler: ^9.2.0
   firebase_storage: ^10.2.9
+  graphview: ^1.1.1
+  giff_dialog: ^1.0.1
+  flutter_speed_dial: ^5.0.0+1
 
 dev_dependencies:
   flutter_test:
