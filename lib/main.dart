@@ -1,5 +1,7 @@
+import 'package:family_tree/components/generation/list_view_generation.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
+import 'package:family_tree/screens/generation/generation_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -99,7 +101,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 primary: Color.fromRGBO(28, 136, 231, 0.8),
                 fixedSize: Size(200, 100),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => GenerationList(),
+                  ),
+                );
+              },
               child: Text(
                 'Generation',
                 style: TextStyle(fontSize: 20),
