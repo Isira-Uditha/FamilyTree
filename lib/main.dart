@@ -1,8 +1,12 @@
 import 'package:family_tree/providers/member_provider.dart';
+import 'package:family_tree/providers/history_provider.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
+import 'package:family_tree/Model/history.dart';
+import 'package:family_tree/screens/history/history_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:family_tree/screens/history/add_history.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -117,7 +121,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 primary: Color.fromRGBO(28, 136, 231, 0.8),
                 fixedSize: Size(200, 100),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HistoryList(),
+                  ),
+                );
+              },
               child: Text(
                 'History',
                 style: TextStyle(fontSize: 20),
@@ -135,7 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 primary: Color.fromRGBO(28, 136, 231, 0.8),
                 fixedSize: Size(200, 100),
               ),
-              onPressed: () {},
+              onPressed: () {
+
+              },
               child: Text(
                 'Events',
                 style: TextStyle(fontSize: 20),
