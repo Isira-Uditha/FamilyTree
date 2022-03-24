@@ -5,6 +5,7 @@ import 'package:family_tree/components/family/storage.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/family/member/member_list.dart';
 import 'package:family_tree/screens/family/member/pop_sibling.dart';
+import 'package:family_tree/screens/generation/generation_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:graphview/GraphView.dart';
@@ -152,6 +153,33 @@ class _FamilyState extends State<Family> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => const MemberList(),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: const [
+                          Icon(
+                            Icons.family_restroom,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 25.0,
+                          ),
+                          Text(
+                            'Generation',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                                color: Colors.white),
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const GenerationList(),
                           ),
                         );
                       },
