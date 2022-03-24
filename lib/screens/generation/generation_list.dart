@@ -19,6 +19,7 @@ class GenerationList extends StatelessWidget {
         String dob = element['dob'];
         String relationship = element['relationship'];
         String description = element['description'];
+        String image = element['image'];
 
         Member familyMember = Member(
             docId: docId,
@@ -26,7 +27,9 @@ class GenerationList extends StatelessWidget {
             dob: dob,
             age: age,
             relationship: relationship,
-            description: description);
+            description: description,
+            image: image
+        );
         members.add(familyMember);
       }
     });

@@ -55,6 +55,7 @@ class _GenerationListViewState extends State<GenerationListView> {
                     String dob = element['dob'];
                     String relationship = element['relationship'];
                     String description = element['description'];
+                    String image = element['image'];
 
                     Member familyMember = Member(
                         docId: docId,
@@ -62,7 +63,8 @@ class _GenerationListViewState extends State<GenerationListView> {
                         dob: dob,
                         age: age,
                         relationship: relationship,
-                        description: description);
+                        description: description,
+                        image: image);
                     members.add(familyMember);
                     memberList.forEach((key, value) {
                       if (key == docId) {
