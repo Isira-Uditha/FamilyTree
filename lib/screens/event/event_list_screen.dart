@@ -1,5 +1,6 @@
 import 'package:family_tree/Model/event.dart';
 import 'package:family_tree/components/event/event_list.dart';
+import 'package:family_tree/screens/event/add_event.dart';
 import 'package:flutter/material.dart';
 
 class EventListScreen extends StatelessWidget {
@@ -16,7 +17,10 @@ class EventListScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => AddEventScreen()))
+            },
             icon: const Padding(
               padding: EdgeInsets.only(right: double.infinity),
               child: Icon(

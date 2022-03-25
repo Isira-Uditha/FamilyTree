@@ -10,7 +10,7 @@ class Event {
   final String place;
   final String description;
 
-  Event(
+  const Event(
       {this.docId,
       required this.name,
       required this.date,
