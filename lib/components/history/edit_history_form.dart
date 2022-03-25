@@ -134,10 +134,6 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
                     gethistoryDate = DateFormat('yyyy-MM-dd').format(newDate);
                     setState(() {
                       _historyDateController.text = gethistoryDate;
-                      // _ageController.text =
-                      //     Provider.of<MemberProvider>(context, listen: false)
-                      //         .calculateAge(newDate)
-                      //         .toString();
                     });
                   });
                 },
@@ -209,41 +205,6 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
                   ))
                   : Container(),
           const SizedBox(height: 8.0),
-
-              // const Text(
-              //   "Member",
-              //   style: TextStyle(
-              //       color: Color.fromARGB(255, 22, 115, 177),
-              //       fontSize: 19.0,
-              //       letterSpacing: 1,
-              //       fontWeight: FontWeight.bold),
-              // ),
-
-              // const SizedBox(height: 8.0),
-              // DropdownButtonFormField(
-              //   decoration: Provider.of<MemberProvider>(context, listen: false)
-              //       .inputDecoration(),
-              //   onChanged: (val) {
-              //     setState(() => getmembers = val.toString());
-              //   },
-              //   value: getmembers.isEmpty ? 'My Self' : getmembers,
-              //   validator: (String? val) {
-              //     if (val == null || val.isEmpty) {
-              //       return 'This source can not be empty.';
-              //     } else {
-              //       setState(() {
-              //         getmembers = val.toString();
-              //       });
-              //     }
-              //   },
-              //   items: relationships.map((relationship) {
-              //     return DropdownMenuItem(
-              //       child: Text(relationship),
-              //       value: relationship,
-              //     );
-              //   }).toList(),
-              // ),
-
               const Text(
                 "Description",
                 style: TextStyle(
@@ -300,7 +261,6 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
                             title: 'Successfully Updated',
                             body: 'Record has been successfully updated',
                             context: context);
-
                       });
                     } else {
                       print(0);
