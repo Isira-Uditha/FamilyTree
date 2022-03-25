@@ -3,15 +3,17 @@ import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/screens/family/member/member_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:giff_dialog/giff_dialog.dart';
 
 class MemberProvider extends ChangeNotifier {
   Set<Member> _members = {};
+
   Set<Member> get member => _members;
 
   void addMember(Member member) async {
     await Member.addMember(member);
     notifyListeners();
-
   }
 
   calculateAge(DateTime birthDate) {
@@ -71,10 +73,47 @@ class MemberProvider extends ChangeNotifier {
     return Member.readMembers();
   }
 
-  alert({required String title,required String body, required BuildContext context}){
+  Future<void> popMemberDetails({
+    required Member member,
+    required Widget image,
+    required int index,
+    required BuildContext context,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return NetworkGiffDialog(
+          image: image,
+          entryAnimation: EntryAnimation.topLeft,
+          title: Text(
+            member.relationship,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+          ),
+          description: Text(
+            'Name : ${member.name}\n\nAge : ${member.age}\n\nDate of Birth : ${member.dob}',
+            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+            textAlign: TextAlign.start,
+          ),
+          onlyOkButton: true,
+          onOkButtonPressed: () {
+            Navigator.of(context).pop();
+          },
+          buttonOkColor: Colors.blue,
+        );
+      },
+    );
+  }
+
+  alert({
+    required String title,
+    required String body,
+    required BuildContext context,
+  }) {
     return showDialog<void>(
         context: context,
-        barrierDismissible: false, // user must tap button!
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('${title}'),
@@ -89,9 +128,9 @@ class MemberProvider extends ChangeNotifier {
               TextButton(
                 child: const Text('OK'),
                 onPressed: () {
-                  if(title == 'Successfully Deleted'){
+                  if (title == 'Successfully Deleted') {
                     Navigator.pop(context);
-                  }else{
+                  } else {
                     int count = 0;
                     Navigator.of(context).popUntil((_) => count++ >= 2);
                   }
@@ -99,8 +138,6 @@ class MemberProvider extends ChangeNotifier {
               ),
             ],
           );
-        }
-    );
+        });
   }
-
 }
