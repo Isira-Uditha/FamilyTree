@@ -7,14 +7,16 @@ class Event {
   final String? docId;
   final String name;
   final String date;
-  final String place;
+  final String time;
+  final String location;
   final String description;
 
   const Event(
       {this.docId,
       required this.name,
       required this.date,
-      required this.place,
+      required this.time,
+      required this.location,
       required this.description});
 
   static Future<void> addEvent(Event event) async {
@@ -24,7 +26,8 @@ class Event {
     Map<String, dynamic> data = <String, dynamic>{
       "name": event.name,
       "date": event.date,
-      "place": event.place,
+      "time": event.time,
+      "location": event.location,
       "description": event.description,
     };
 
@@ -59,7 +62,8 @@ class Event {
     Map<String, dynamic> data = <String, dynamic>{
       "name": event.name,
       "date": event.date,
-      "place": event.place,
+      "time": event.time,
+      "location": event.location,
       "description": event.description,
     };
 

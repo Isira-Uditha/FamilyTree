@@ -1,52 +1,62 @@
 import 'package:family_tree/Model/event.dart';
 import 'package:family_tree/providers/event_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class AddEventForm extends StatefulWidget {
+class EditEventForm extends StatefulWidget {
   final FocusNode eventNameFocusNode;
   final FocusNode dateFocusNode;
   final FocusNode timeFocusNode;
   final FocusNode locationFocusNode;
   final FocusNode descriptionFocusNode;
+  final Event event;
 
-  const AddEventForm({
+  const EditEventForm({
     Key? key,
     required this.eventNameFocusNode,
     required this.dateFocusNode,
     required this.timeFocusNode,
     required this.locationFocusNode,
     required this.descriptionFocusNode,
+    required this.event,
   }) : super(key: key);
 
   @override
-  _AddEventFormState createState() => _AddEventFormState();
+  _EditEventFormState createState() => _EditEventFormState();
 }
 
-class _AddEventFormState extends State<AddEventForm> {
-  final _addEventFormKey = GlobalKey<FormState>();
+class _EditEventFormState extends State<EditEventForm> {
+  final _editEventFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
-  TimeOfDay currentTime = TimeOfDay.now();
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
   String getEventName = "";
   String getDate = "";
   String getTime = "";
   String getLocation = "";
   String getDescription = "";
+  TimeOfDay currentTime = TimeOfDay.now();
+
+  final TextEditingController _eventNameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _eventNameController.text = widget.event.name;
+    _dateController.text = widget.event.date;
+    _timeController.text = widget.event.time;
+    _locationController.text = widget.event.location;
+    _descriptionController.text = widget.event.description;
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Form(
-        key: _addEventFormKey,
+        key: _editEventFormKey,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -66,7 +76,7 @@ class _AddEventFormState extends State<AddEventForm> {
               TextFormField(
                 decoration: Provider.of<EventProvider>(context, listen: false)
                     .inputDecoration(),
-                controller: _nameController,
+                controller: _eventNameController,
                 focusNode: widget.eventNameFocusNode,
                 onSaved: (String? val) {},
                 textInputAction: TextInputAction.done,
@@ -229,25 +239,27 @@ class _AddEventFormState extends State<AddEventForm> {
                     widget.locationFocusNode.unfocus();
                     widget.descriptionFocusNode.unfocus();
 
-                    if (_addEventFormKey.currentState!.validate()) {
+                    if (_editEventFormKey.currentState!.validate()) {
                       setState(() {
                         _isProcessing = true;
                       });
 
                       Event event = Event(
+                          docId: widget.event.docId,
                           name: getEventName,
                           date: getDate,
                           time: getTime,
                           location: getLocation,
                           description: getDescription);
-                      await Event.addEvent(event);
+
+                      await Event.updateEvent(event);
 
                       setState(() {
                         _isProcessing = false;
                         Provider.of<EventProvider>(context, listen: false)
                             .alert(
-                                title: 'Successfully Added',
-                                body: 'Event has been successfully added',
+                                title: 'Successfully Updated',
+                                body: 'Event has been successfully updated',
                                 context: context);
                       });
                     } else {
@@ -256,7 +268,7 @@ class _AddEventFormState extends State<AddEventForm> {
                   },
                   style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
                   child: (!_isProcessing)
-                      ? Text("Save")
+                      ? Text("Edit")
                       : const CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.redAccent),

@@ -6,7 +6,8 @@ class AddEventScreen extends StatelessWidget {
 
   final FocusNode _eventNameFocusNode = FocusNode();
   final FocusNode _dateFocusNode = FocusNode();
-  final FocusNode _placeFocusNode = FocusNode();
+  final FocusNode _timeFocusNode = FocusNode();
+  final FocusNode _locationFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
 
   @override
@@ -15,7 +16,8 @@ class AddEventScreen extends StatelessWidget {
       onTap: () => {
         _eventNameFocusNode.unfocus(),
         _dateFocusNode.unfocus(),
-        _placeFocusNode.unfocus(),
+        _timeFocusNode.unfocus(),
+        _locationFocusNode.unfocus(),
         _descriptionFocusNode.unfocus(),
       },
       child: Scaffold(
@@ -37,8 +39,9 @@ class AddEventScreen extends StatelessWidget {
                   child: AddEventForm(
                 eventNameFocusNode: _eventNameFocusNode,
                 dateFocusNode: _dateFocusNode,
+                timeFocusNode: _timeFocusNode,
                 descriptionFocusNode: _descriptionFocusNode,
-                placeFocusNode: _placeFocusNode,
+                locationFocusNode: _locationFocusNode,
               ))
             ],
           ),

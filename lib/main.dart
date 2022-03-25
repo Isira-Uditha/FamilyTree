@@ -1,3 +1,4 @@
+import 'package:family_tree/providers/event_provider.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/event/event_list_screen.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (create) => MemberProvider()),
+    ChangeNotifierProvider(create: (create) => EventProvider()),
   ], child: const MyApp()));
 }
 
