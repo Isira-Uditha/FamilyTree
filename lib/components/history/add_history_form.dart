@@ -117,10 +117,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                     gethistoryDate = DateFormat('yyyy-MM-dd').format(newDate);
                     setState(() {
                       _historyDateController.text = gethistoryDate;
-                      // _ageController.text =
-                      //     Provider.of<MemberProvider>(context, listen: false)
-                      //         .calculateAge(newDate)
-                      //         .toString();
                     });
                   });
                 },
@@ -134,36 +130,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                   }
                 },
               ),
-              //const SizedBox(height: 8.0),
-              // SizedBox(height: 8.0),
-              // const Text(
-              //   "Age",
-              //   style: TextStyle(
-              //       color: Color.fromARGB(255, 22, 115, 177),
-              //       fontSize: 19.0,
-              //       letterSpacing: 1,
-              //       fontWeight: FontWeight.bold),
-              // ),
-              // const SizedBox(height: 8.0),
-              // TextFormField(
-              //   decoration: Provider.of<MemberProvider>(context, listen: false)
-              //       .inputDecoration(),
-              //   controller: _ageController,
-              //   focusNode: widget.ageFocusNode,
-              //   onSaved: (String? value) {},
-              //   textInputAction: TextInputAction.done,
-              //   keyboardType: TextInputType.text,
-              //   validator: (val) {
-              //     if (val != null && val.isEmpty) {
-              //       return 'Age cannot be empty.';
-              //     } else {
-              //       setState(() {
-              //         getAge = val.toString();
-              //       });
-              //     }
-              //   },
-              // ),
-              //const SizedBox(height: 8.0),
               const SizedBox(height: 15.0),
               MultiSelectDialogField(
                   items: widget.allMembers
@@ -180,7 +146,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                   decoration: BoxDecoration(
                       color: Colors.blue.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.0),
-                      //   borderRadius: BorderRadius.all(Radius.circular(40)),
                       border: Border.all(
                         color: Colors.blue,
                         width: 2,
@@ -219,42 +184,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                     style: TextStyle(color: Colors.black54),
                   ))
                   : Container(),
-
-
-
-              // const Text(
-              //   "Member",
-              //   style: TextStyle(
-              //       color: Color.fromARGB(255, 22, 115, 177),
-              //       fontSize: 19.0,
-              //       letterSpacing: 1,
-              //       fontWeight: FontWeight.bold),
-              // ),
-
-              // const SizedBox(height: 8.0),
-              // DropdownButtonFormField(
-              //   decoration: Provider.of<MemberProvider>(context, listen: false)
-              //       .inputDecoration(),
-              //   onChanged: (val) {
-              //     setState(() => getmembers = val.toString());
-              //   },
-              //   value: getmembers.isEmpty ? 'My Self' : getmembers,
-              //   validator: (String? val) {
-              //     if (val == null || val.isEmpty) {
-              //       return 'This source can not be empty.';
-              //     } else {
-              //       setState(() {
-              //         getmembers = val.toString();
-              //       });
-              //     }
-              //   },
-              //   items: relationships.map((relationship) {
-              //     return DropdownMenuItem(
-              //       child: Text(relationship),
-              //       value: relationship,
-              //     );
-              //   }).toList(),
-              // ),
               SizedBox(height: 8.0),
               const Text(
                 "Description",
