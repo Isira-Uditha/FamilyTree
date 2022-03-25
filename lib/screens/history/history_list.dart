@@ -58,7 +58,7 @@ class HistoryList extends StatelessWidget {
         ],
         backgroundColor: Colors.blue,
         title: const Text(
-          'Member List',
+          'History List',
           style: TextStyle(color: Colors.white),
         ),
       ),

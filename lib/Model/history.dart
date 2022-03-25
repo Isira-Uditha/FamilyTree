@@ -42,7 +42,7 @@ class History {
 
     await documentReference
         .set(data)
-        .whenComplete(() => print("Note history inserted to the database"))
+        .whenComplete(() => print("History inserted to the database"))
         .catchError((e) => print(e));
   }
 
@@ -72,7 +72,7 @@ class History {
 
     await documentReference
         .set(data)
-        .whenComplete(() => print("Note history updated in the database"))
+        .whenComplete(() => print("History updated in the database"))
         .catchError((e) => print(e));
   }
 
@@ -84,7 +84,7 @@ class History {
 
     await documentReference
         .delete()
-        .whenComplete(() => print("Note history deleted from the database"))
+        .whenComplete(() => print("History deleted from the database"))
         .catchError((e) => print(e));
   }
 }
