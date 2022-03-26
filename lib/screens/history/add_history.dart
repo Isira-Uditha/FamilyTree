@@ -9,7 +9,6 @@ class AddHistoryScreen extends StatelessWidget {
 
   final FocusNode _topicFocusNode = FocusNode();
   final FocusNode _historyDateFocusNode = FocusNode();
-  final FocusNode _historyImageFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
 
   @override
@@ -18,7 +17,6 @@ class AddHistoryScreen extends StatelessWidget {
       onTap: () => {
         _topicFocusNode.unfocus(),
         _historyDateFocusNode.unfocus(),
-        _historyImageFocusNode.unfocus(),
         _descriptionFocusNode.unfocus(),
       },
       child: Scaffold(
@@ -40,7 +38,6 @@ class AddHistoryScreen extends StatelessWidget {
                 child: AddHistoryForm(
                   topicFocusNode: _topicFocusNode,
                   historyDateFocusNode: _historyDateFocusNode,
-                  historyImageFocusNode: _historyImageFocusNode,
                   allMembers: allMembers,
                   descriptionFocusNode: _descriptionFocusNode,
                 ),

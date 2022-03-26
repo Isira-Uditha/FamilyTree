@@ -8,17 +8,17 @@ class History {
   final String? historyID;
   final String topic;
   final String historyDate;
-  final String historyImage;
   final List<Member> members;
   final String description;
+  final String image;
 
   const History({
     this.historyID,
     required this.topic,
     required this.historyDate,
-    required this.historyImage,
     required this.members,
     required this.description,
+    required this.image,
   });
 
 
@@ -35,9 +35,9 @@ class History {
     Map<String, dynamic> data = <String, dynamic>{
       "topic": history.topic,
       "historyDate": history.historyDate,
-      "historyImage": history.historyImage,
       "members": members,
       "description": history.description,
+      "image": history.image
     };
 
     await documentReference
@@ -65,9 +65,9 @@ class History {
     Map<String, dynamic> data = <String, dynamic>{
       "topic": history.topic,
       "historyDate": history.historyDate,
-      "historyImage": history.historyImage,
       "members": members,
       "description": history.description,
+      "image": history.image,
     };
 
     await documentReference

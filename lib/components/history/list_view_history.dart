@@ -32,7 +32,7 @@ class _HistoryListViewState extends State<HistoryListView> {
                 String historyID = snapshot.data!.docs[index].id;
                 String topic = history['topic'];
                 String historyDate = history['historyDate'];
-                String historyImage = history['historyImage'];
+                String image = history['image'] ?? "";
                 String description = history['description'];
                 final memberList =
                 history['members'] as Map<dynamic, dynamic>;
@@ -76,7 +76,7 @@ class _HistoryListViewState extends State<HistoryListView> {
                               currenthistoryID: historyID,
                               currenttopic: topic,
                               currenthistoryDate: historyDate,
-                              currenthistoryImage: historyImage,
+                              currentImage: image,
                               currentMembers: currentMembers,
                               currentDescription: description,
                               allMembers: members),

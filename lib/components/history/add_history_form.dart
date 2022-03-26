@@ -1,21 +1,22 @@
-import 'dart:collection';
-import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+//import 'dart:html';
+import 'dart:io';
+
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/Model/history.dart';
-import 'package:family_tree/providers/history_provider.dart';
 import 'package:family_tree/providers/member_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:giff_dialog/giff_dialog.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 
 class AddHistoryForm extends StatefulWidget {
   final FocusNode topicFocusNode;
   final FocusNode historyDateFocusNode;
-  final FocusNode historyImageFocusNode;
   final List<Member> allMembers;
   final FocusNode descriptionFocusNode;
 
@@ -23,7 +24,6 @@ class AddHistoryForm extends StatefulWidget {
       {Key? key,
         required this.topicFocusNode,
         required this.historyDateFocusNode,
-        required this.historyImageFocusNode,
         required this.allMembers,
         required this.descriptionFocusNode})
       : super(key: key);
@@ -35,16 +35,37 @@ class AddHistoryForm extends StatefulWidget {
 class _AddHistoryFormState extends State<AddHistoryForm> {
   final _addHistoryFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
+  bool _isUploding = false;
   final TextEditingController _topicController = TextEditingController();
   final TextEditingController _historyDateController = TextEditingController();
-  final TextEditingController _historyImageController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   String gettopic = "";
   String gethistoryDate = "";
-  String gethistoryImage = "";
   List<Member> getmembers = [];
   String getDescription = "";
+
+  XFile? _image;
+
+  Future getImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final image = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future uploadImage() async {
+    String fileName = basename(_image!.path);
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child('uploads/$fileName');
+    UploadTask uploadTask = ref.putFile(File(_image!.path));
+    uploadTask.then((res) {
+      res.ref.getDownloadURL();
+    });
+    return 'uploads/$fileName';
+  }
 
   List<Member> members = [];
 
@@ -60,6 +81,47 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 100,
+                    backgroundColor: Colors.blue,
+                    child: ClipOval(
+                      child: SizedBox(
+                        width: 180.0,
+                        height: 180.0,
+                        child: (_image == null)
+                            ? const Image(
+                          image: AssetImage('assets/user.png'),
+                          fit: BoxFit.cover,
+                        )
+                            : Image.file(
+                          File(_image!.path),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 60.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _isUploding = true;
+                        });
+
+                        await getImage();
+                      },
+                    ),
+                  )
+                ],
+              ),
               SizedBox(height: 8.0),
               const Text(
                 "History Topic",
@@ -216,7 +278,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                   onPressed: () async {
                     widget.topicFocusNode.unfocus();
                     widget.historyDateFocusNode.unfocus();
-                    widget.historyImageFocusNode.unfocus();
                     widget.descriptionFocusNode.unfocus();
 
                     if (_addHistoryFormKey.currentState!.validate()) {
@@ -224,17 +285,26 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                         _isProcessing = true;
                       });
 
+                      String imagePath = '';
+
+                      if (_isUploding) {
+                        imagePath = await uploadImage();
+                      }
+
                       History newHistory = History(
                           topic: gettopic,
                           historyDate: gethistoryDate,
-                          historyImage: gethistoryImage,
                           members: getmembers,
-                          description: getDescription);
+                          description: getDescription,
+                          image: imagePath,
+                      );
 
                       await History.addHistory(newHistory);
 
                       setState(() async {
                         _isProcessing = false;
+                        _isUploding = false;
+
                         Provider.of<MemberProvider>(context, listen: false)
                             .alert(
                             title: 'Successfully Inserted',
