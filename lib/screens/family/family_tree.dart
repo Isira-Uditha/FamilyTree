@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/components/family/storage.dart';
 import 'package:family_tree/providers/member_provider.dart';
+import 'package:family_tree/screens/event/event_list_screen.dart';
 import 'package:family_tree/screens/family/member/member_list.dart';
 import 'package:family_tree/screens/family/member/pop_sibling.dart';
 import 'package:family_tree/screens/generation/generation_list.dart';
@@ -99,8 +100,8 @@ class _FamilyState extends State<Family> {
                 child: const DrawerHeader(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/user.png"),
-                      scale: 8.0,
+                      image: AssetImage("assets/blood line white.png"),
+                      scale: 1.0,
                     ),
                   ),
                   child: SizedBox(),
@@ -153,6 +154,54 @@ class _FamilyState extends State<Family> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => const MemberList(),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: const [
+                          Icon(
+                            Icons.history,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 25.0,
+                          ),
+                          Text(
+                            'History',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                                color: Colors.white),
+                          )
+                        ],
+                      ),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: const [
+                          Icon(
+                            Icons.event,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 25.0,
+                          ),
+                          Text(
+                            'Events',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                                color: Colors.white),
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const EventListScreen(),
                           ),
                         );
                       },

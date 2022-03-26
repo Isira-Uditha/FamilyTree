@@ -76,8 +76,7 @@ flutter:
   assets:
     - assets/generation/
     - assets/user.png
-    - assets/family_tree.png
-    - assets/blood_line.png
+    - assets/blood line white.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
