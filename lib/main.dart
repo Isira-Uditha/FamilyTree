@@ -1,5 +1,7 @@
+import 'package:animated_background/animated_background.dart';
 import 'package:family_tree/providers/event_provider.dart';
 import 'package:family_tree/components/generation/list_view_generation.dart';
+import 'package:family_tree/providers/generation_provider.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/event/event_list_screen.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
@@ -12,6 +14,7 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (create) => MemberProvider()),
     ChangeNotifierProvider(create: (create) => EventProvider()),
+    ChangeNotifierProvider(create: (create) => GenerationProvider()),
   ], child: const MyApp()));
 }
 
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: const MyHomePage(title: 'Family Tree'),
+              home: const MyCoverPage(),
             );
           }
           return const CircularProgressIndicator(
@@ -161,6 +164,66 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class MyCoverPage extends StatefulWidget {
+  const MyCoverPage({Key? key}) : super(key: key);
+
+  @override
+  State<MyCoverPage> createState() => _MyCoverPageState();
+}
+
+class _MyCoverPageState extends State<MyCoverPage> with TickerProviderStateMixin {
+
+  ParticleOptions particleOptions = ParticleOptions(
+    image: Image.asset('assets/family.png',height: 100, width: 200),
+    //baseColor: Colors.blue,
+    spawnOpacity: 0.0,
+    opacityChangeRate: 1.25,
+    minOpacity: 0.7,
+    maxOpacity: 0.9,
+    spawnMinSpeed: 30.0,
+    spawnMaxSpeed: 70.0,
+    spawnMinRadius: 7.0,
+    spawnMaxRadius: 15.0,
+    particleCount: 50,);
+
+  var particlePaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blueGrey,
+      //backgroundColor: Color.fromRGBO(28, 169, 201, 0.9),
+      body:   AnimatedBackground(
+        behaviour: RandomParticleBehaviour( options: particleOptions,
+          paint: particlePaint,),
+        vsync: this,
+        child: Center(
+          child: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/blood_line_red.png"),
+                  //fit: BoxFit.cover,
+                )
+            ),
+            child:
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const MyHomePage(title: 'Family Tree')
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

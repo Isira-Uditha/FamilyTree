@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_tree/Model/generation.dart';
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/Model/quality.dart';
-import 'package:family_tree/providers/member_provider.dart';
+import 'package:family_tree/providers/generation_provider.dart';
 import 'package:family_tree/screens/generation/edit_generation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +129,7 @@ class _GenerationListViewState extends State<GenerationListView> {
                                         docId: docId);
                                     setState(() {
                                       _isDeleted = false;
-                                      Provider.of<MemberProvider>(context,
+                                      Provider.of<GenerationProvider>(context,
                                               listen: false)
                                           .alert(
                                               title: 'Successfully Deleted',

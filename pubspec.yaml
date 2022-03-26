@@ -49,6 +49,7 @@ dependencies:
   giff_dialog: ^1.0.1
   flutter_speed_dial: ^5.0.0+1
   multi_select_flutter: ^4.0.0
+  animated_background: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,8 @@ flutter:
     - assets/generation/
     - assets/user.png
     - assets/blood line white.png
+    - assets/blood_line_red.png
+    - assets/family.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
