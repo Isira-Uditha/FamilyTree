@@ -99,8 +99,8 @@ class _FamilyState extends State<Family> {
                 child: const DrawerHeader(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/user.png"),
-                      scale: 8.0,
+                      image: AssetImage("assets/blood line white.png"),
+                      scale: 1.0,
                     ),
                   ),
                   child: SizedBox(),
