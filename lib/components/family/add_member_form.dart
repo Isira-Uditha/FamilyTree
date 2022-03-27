@@ -290,61 +290,67 @@ class _AddMemberFormState extends State<AddMemberForm> {
                   });
                 },
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 15.0),
               Align(
                 alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    widget.nameFocusNode.unfocus();
-                    widget.dobFocusNode.unfocus();
-                    widget.ageFocusNode.unfocus();
-                    widget.descriptionFocusNode.unfocus();
-                    widget.descriptionFocusNode.unfocus();
+                child: SizedBox(
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      widget.nameFocusNode.unfocus();
+                      widget.dobFocusNode.unfocus();
+                      widget.ageFocusNode.unfocus();
+                      widget.descriptionFocusNode.unfocus();
+                      widget.descriptionFocusNode.unfocus();
 
-                    if (_addMemberFormKey.currentState!.validate()) {
-                      setState(() {
-                        _isProcessing = true;
-                      });
+                      if (_addMemberFormKey.currentState!.validate()) {
+                        setState(() {
+                          _isProcessing = true;
+                        });
 
-                      String imagePath = '';
+                        String imagePath = '';
 
-                      if (_isUploding) {
-                        imagePath = await uploadImage();
+                        if (_isUploding) {
+                          imagePath = await uploadImage();
+                        }
+
+                        Member newMember = Member(
+                          name: getName,
+                          dob: getDob,
+                          age: getAge,
+                          relationship: getRelationship,
+                          description: getDescription,
+                          image: imagePath,
+                        );
+
+                        await Member.addMember(newMember);
+
+                        setState(() async {
+                          _isProcessing = false;
+                          _isUploding = false;
+
+                          Provider.of<MemberProvider>(context, listen: false)
+                              .alert(
+                                  title: 'Successfully Inserted',
+                                  body: 'Record has been successfully inserted',
+                                  context: context);
+                        });
+                      } else {
+                        print(0);
                       }
-
-                      Member newMember = Member(
-                        name: getName,
-                        dob: getDob,
-                        age: getAge,
-                        relationship: getRelationship,
-                        description: getDescription,
-                        image: imagePath,
-                      );
-
-                      await Member.addMember(newMember);
-
-                      setState(() async {
-                        _isProcessing = false;
-                        _isUploding = false;
-
-                        Provider.of<MemberProvider>(context, listen: false)
-                            .alert(
-                                title: 'Successfully Inserted',
-                                body: 'Record has been successfully inserted',
-                                context: context);
-                      });
-                    } else {
-                      print(0);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
-                  child: (!_isProcessing)
-                      ? const Text('Save')
-                      : const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.redAccent,
+                    },
+                    style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
+                    child: (!_isProcessing)
+                        ? const Text(
+                            'Save',
+                            style: TextStyle(fontSize: 15, letterSpacing: 2),
+                          )
+                        : const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.redAccent,
+                            ),
                           ),
-                        ),
+                  ),
                 ),
               )
             ],
