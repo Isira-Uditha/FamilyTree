@@ -48,6 +48,7 @@ class _AddEventFormState extends State<AddEventForm> {
   String getLocation = "";
   String getDescription = "";
   List<Member> getParticipants = [];
+  late DateTime selectedDate;
 
   List<Member> _selectedParticipants = [];
 
@@ -117,6 +118,7 @@ class _AddEventFormState extends State<AddEventForm> {
                       lastDate: DateTime(2023));
                   if (newDate == null) return;
                   setState(() {
+                    selectedDate = newDate;
                     getDate = DateFormat('yyyy-MM-dd').format(newDate);
                     _dateController.text = getDate;
                   });
@@ -124,7 +126,9 @@ class _AddEventFormState extends State<AddEventForm> {
                 validator: (val) {
                   if (val != null && val.isEmpty) {
                     return 'Date cannot be empty.';
-                  } else {
+                  } else if(selectedDate.isBefore(DateTime.now())){
+                    return 'Only upcoming dates are accepted. Please check the date again. Add the event as History if the date is correct.';
+                  }else {
                     setState(() {
                       getDate = val.toString();
                     });
