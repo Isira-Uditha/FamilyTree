@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_tree/Model/event.dart';
+import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/screens/event/edit_event_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,38 @@ class _EventListState extends State<EventList> {
                   String location = event['location'];
                   String description = event['description'];
 
+                  final participantList =
+                      event['participants'] as Map<dynamic, dynamic>;
+                  final List<Member> members = [];
+                  final List<Member> currentParticipants = [];
+                  var list = Member.readMembers();
+                  list.forEach((element) {
+                    for (var element in element.docs) {
+                      String docId = element.id;
+                      String name = element['name'];
+                      String age = element['age'];
+                      String dob = element['dob'];
+                      String relationship = element['relationship'];
+                      String description = element['description'];
+                      String image = element['image'];
+
+                      Member familyMember = Member(
+                          docId: docId,
+                          name: name,
+                          dob: dob,
+                          age: age,
+                          relationship: relationship,
+                          description: description,
+                          image: image);
+                      members.add(familyMember);
+                      participantList.forEach((key, value) {
+                        if (key == docId) {
+                          currentParticipants.add(familyMember);
+                        }
+                      });
+                    }
+                  });
+
                   return Padding(
                     padding: EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -42,12 +75,15 @@ class _EventListState extends State<EventList> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => EditEventScreen(
-                                currentDocId: docId,
-                                eventName: name,
-                                date: date,
-                                time: time,
-                                location: location,
-                                description: description),
+                              currentDocId: docId,
+                              eventName: name,
+                              date: date,
+                              time: time,
+                              location: location,
+                              description: description,
+                              currentParticipants: currentParticipants,
+                              allParticipants: members,
+                            ),
                           ),
                         );
                       },
