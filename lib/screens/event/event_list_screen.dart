@@ -1,4 +1,5 @@
 import 'package:family_tree/Model/event.dart';
+import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/components/event/event_list.dart';
 import 'package:family_tree/screens/event/add_event.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,31 @@ class EventListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Member> participants = [];
     final List<Event> events = [];
+    var list = Member.readMembers();
+
+    list.forEach((element) {
+      for (var element in element.docs) {
+        String docId = element.id;
+        String name = element['name'];
+        String age = element['age'];
+        String dob = element['dob'];
+        String relationship = element['relationship'];
+        String description = element['description'];
+        String image = element['image'];
+
+        Member familyMember = Member(
+            docId: docId,
+            name: name,
+            age: age,
+            dob: dob,
+            relationship: relationship,
+            description: description,
+            image: image);
+        participants.add(familyMember);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -19,7 +44,12 @@ class EventListScreen extends StatelessWidget {
           IconButton(
             onPressed: () => {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AddEventScreen()))
+                MaterialPageRoute(
+                  builder: (context) => AddEventScreen(
+                    allParticipants: participants,
+                  ),
+                ),
+              )
             },
             icon: const Padding(
               padding: EdgeInsets.only(right: double.infinity),
