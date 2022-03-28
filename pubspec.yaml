@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/generation/
     - assets/user.png
+    - assets/blood line white.png
     - assets/delete.gif
 
 
