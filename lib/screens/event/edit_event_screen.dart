@@ -1,4 +1,5 @@
 import 'package:family_tree/Model/event.dart';
+import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/components/event/edit_event_form.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,8 @@ class EditEventScreen extends StatefulWidget {
   final String time;
   final String location;
   final String description;
+  final List<Member> currentParticipants;
+  final List<Member> allParticipants;
 
   const EditEventScreen({
     Key? key,
@@ -16,8 +19,10 @@ class EditEventScreen extends StatefulWidget {
     required this.eventName,
     required this.date,
     required this.time,
+    required this.currentParticipants,
     required this.location,
     required this.description,
+    required this.allParticipants,
   }) : super(key: key);
 
   @override
@@ -59,11 +64,13 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     timeFocusNode: _timeFocusNode,
                     locationFocusNode: _locationFocusNode,
                     descriptionFocusNode: _descriptionFocusNode,
+                    allParticipants: widget.allParticipants,
                     event: Event(
                       docId: widget.currentDocId,
                       name: widget.eventName,
                       date: widget.date,
                       time: widget.time,
+                      participants: widget.currentParticipants,
                       location: widget.location,
                       description: widget.description,
                     )),

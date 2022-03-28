@@ -2,7 +2,11 @@ import 'package:family_tree/Model/event.dart';
 import 'package:family_tree/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../Model/member.dart';
 
 class EditEventForm extends StatefulWidget {
   final FocusNode eventNameFocusNode;
@@ -10,6 +14,7 @@ class EditEventForm extends StatefulWidget {
   final FocusNode timeFocusNode;
   final FocusNode locationFocusNode;
   final FocusNode descriptionFocusNode;
+  final List<Member> allParticipants;
   final Event event;
 
   const EditEventForm({
@@ -19,6 +24,7 @@ class EditEventForm extends StatefulWidget {
     required this.timeFocusNode,
     required this.locationFocusNode,
     required this.descriptionFocusNode,
+    required this.allParticipants,
     required this.event,
   }) : super(key: key);
 
@@ -34,13 +40,17 @@ class _EditEventFormState extends State<EditEventForm> {
   String getTime = "";
   String getLocation = "";
   String getDescription = "";
+  List<Member> getParticipants = [];
   TimeOfDay currentTime = TimeOfDay.now();
+  late DateTime currentDate;
 
   final TextEditingController _eventNameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  List<Member> _selectedParticipants = [];
 
   @override
   void initState() {
@@ -50,10 +60,31 @@ class _EditEventFormState extends State<EditEventForm> {
     _timeController.text = widget.event.time;
     _locationController.text = widget.event.location;
     _descriptionController.text = widget.event.description;
+
+    for (var participant in widget.allParticipants) {
+      widget.event.participants.forEach((element) {
+        if (element.docId == participant.docId) {
+          _selectedParticipants.add(participant);
+        }
+      });
+    }
+
+    getParticipants = _selectedParticipants;
   }
 
   @override
   Widget build(BuildContext context) {
+    String eventTime = widget.event.time;
+    String hour = eventTime.split(":")[0];
+    String minute = eventTime.split(":")[1];
+    TimeOfDay currentTime =
+        TimeOfDay(hour: int.parse(hour), minute: int.parse(minute));
+
+    String eventDate = widget.event.date;
+    String year = eventDate.split("-")[0];
+    String month = eventDate.split("-")[1];
+    String day = eventDate.split("-")[2];
+
     return SingleChildScrollView(
       child: Form(
         key: _editEventFormKey,
@@ -63,7 +94,7 @@ class _EditEventFormState extends State<EditEventForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8.0),
-              Text(
+              const Text(
                 "Event Name",
                 style: TextStyle(
                   color: Color.fromARGB(255, 22, 115, 177),
@@ -92,7 +123,7 @@ class _EditEventFormState extends State<EditEventForm> {
                 },
               ),
               const SizedBox(height: 8.0),
-              Text(
+              const Text(
                 "Date",
                 style: TextStyle(
                   color: Color.fromARGB(255, 22, 115, 177),
@@ -113,7 +144,8 @@ class _EditEventFormState extends State<EditEventForm> {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   DateTime? newDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
+                      initialDate: DateTime(
+                          int.parse(year), int.parse(month), int.parse(day)),
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2023));
                   if (newDate == null) return;
@@ -133,7 +165,7 @@ class _EditEventFormState extends State<EditEventForm> {
                 },
               ),
               const SizedBox(height: 8.0),
-              Text(
+              const Text(
                 "Time",
                 style: TextStyle(
                   color: Color.fromARGB(255, 22, 115, 177),
@@ -158,7 +190,7 @@ class _EditEventFormState extends State<EditEventForm> {
                   );
                   if (newTime == null) return;
                   setState(() {
-                    String hour = newTime.hour.toString().padLeft(2,'0');
+                    String hour = newTime.hour.toString().padLeft(2, '0');
                     String minute = newTime.minute.toString().padLeft(2, '0');
                     String time = '${hour}:${minute}';
                     _timeController.text = time;
@@ -175,7 +207,75 @@ class _EditEventFormState extends State<EditEventForm> {
                 },
               ),
               const SizedBox(height: 8.0),
-              Text(
+              const Text(
+                "Add Participants",
+                style: TextStyle(
+                  color: Color.fromARGB(255, 22, 115, 177),
+                  fontSize: 19.0,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              MultiSelectDialogField(
+                listType: MultiSelectListType.LIST,
+                items: widget.allParticipants
+                    .map((e) => MultiSelectItem(e, e.name))
+                    .toList(),
+                initialValue: _selectedParticipants,
+                title: const Text("Participants"),
+                selectedColor: Colors.blue,
+                validator: (values) {
+                  if (values == null || values.isEmpty) {
+                    return "Participants cannot be empty";
+                  }
+                },
+                searchable: true,
+                decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(
+                      color: Colors.blue,
+                      width: 2,
+                    )),
+                buttonIcon: const Icon(
+                  Icons.family_restroom_rounded,
+                  color: Colors.blue,
+                ),
+                buttonText: const Text(
+                  "Select",
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+                onConfirm: (results) {
+                  _selectedParticipants = results.cast<Member>();
+                  setState(() {
+                    _selectedParticipants = _selectedParticipants;
+                  });
+                  getParticipants = [];
+                  getParticipants.addAll(_selectedParticipants);
+                },
+                chipDisplay: MultiSelectChipDisplay(
+                  onTap: (value) {
+                    setState(() {
+                      _selectedParticipants.remove(value);
+                    });
+                  },
+                ),
+              ),
+              getParticipants.isEmpty
+                  ? Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        "None Selected",
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    )
+                  : Container(),
+              const SizedBox(height: 8.0),
+              const Text(
                 "Location",
                 style: TextStyle(
                   color: Color.fromARGB(255, 22, 115, 177),
@@ -204,7 +304,7 @@ class _EditEventFormState extends State<EditEventForm> {
                 },
               ),
               const SizedBox(height: 8.0),
-              Text(
+              const Text(
                 "Description",
                 style: TextStyle(
                   color: Color.fromARGB(255, 22, 115, 177),
@@ -249,6 +349,7 @@ class _EditEventFormState extends State<EditEventForm> {
                           name: getEventName,
                           date: getDate,
                           time: getTime,
+                          participants: getParticipants,
                           location: getLocation,
                           description: getDescription);
 
@@ -268,7 +369,7 @@ class _EditEventFormState extends State<EditEventForm> {
                   },
                   style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
                   child: (!_isProcessing)
-                      ? Text("Edit")
+                      ? const Text("Update")
                       : const CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.redAccent),

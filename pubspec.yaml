@@ -82,11 +82,10 @@ flutter:
     - assets/family.png
     - assets/login_bottom.png
     - assets/main_top.png
-    - assets/delete.gif
     - assets/blood_line _black_dim.png
     - assets/blood_line _drop_shadow.png
     - assets/blood_line_with_icon.png
-
+    - assets/delete.gif
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
