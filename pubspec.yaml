@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/generation/
     - assets/user.png
+    - assets/delete.gif
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

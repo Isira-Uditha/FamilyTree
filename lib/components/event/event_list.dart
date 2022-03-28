@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_tree/Model/event.dart';
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/screens/event/edit_event_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:giff_dialog/giff_dialog.dart';
 import 'package:provider/provider.dart';
 import '../../providers/member_provider.dart';
 
@@ -111,17 +113,50 @@ class _EventListState extends State<EventList> {
                                       _isDeleted = true;
                                     });
 
-                                    await Event.deleteEvent(docId: docId);
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AssetGiffDialog(
+                                        image: Image.asset(
+                                          'assets/delete.gif',
+                                          fit: BoxFit.fill,
+                                        ),
+                                        title: const Text(
+                                          "Are you sure to delete?",
+                                          style: TextStyle(
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        description: const Text(
+                                          "This action cannot be undone. Your selected data will be removed permanently.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        entryAnimation: EntryAnimation.top,
+                                        buttonCancelColor: Colors.black12,
+                                        buttonOkColor: Colors.blueAccent,
+                                        onOkButtonPressed: () async {
+                                          await Event.deleteEvent(docId: docId);
+                                          Navigator.pop(context);
+                                          Provider.of<MemberProvider>(context,
+                                                  listen: false)
+                                              .alert(
+                                                  title: 'Successfully Deleted',
+                                                  body:
+                                                      'Event has been deleted successfully',
+                                                  context: context);
+                                        },
+                                        onCancelButtonPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    );
+
                                     setState(
                                       () {
                                         _isDeleted = false;
-                                        Provider.of<MemberProvider>(context,
-                                                listen: false)
-                                            .alert(
-                                                title: 'Successfully Deleted',
-                                                body:
-                                                    'Event has been deleted successfully',
-                                                context: context);
                                       },
                                     );
                                   },

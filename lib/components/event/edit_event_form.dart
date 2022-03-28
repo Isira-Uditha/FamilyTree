@@ -43,8 +43,6 @@ class _EditEventFormState extends State<EditEventForm> {
   List<Member> getParticipants = [];
   TimeOfDay currentTime = TimeOfDay.now();
   late DateTime currentDate;
-  late DateTime selectedDate;
-
 
   final TextEditingController _eventNameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -79,9 +77,9 @@ class _EditEventFormState extends State<EditEventForm> {
     String eventTime = widget.event.time;
     String hour = eventTime.split(":")[0];
     String minute = eventTime.split(":")[1];
-    TimeOfDay currentTime = TimeOfDay(
-        hour: int.parse(hour), minute: int.parse(minute));
-    
+    TimeOfDay currentTime =
+        TimeOfDay(hour: int.parse(hour), minute: int.parse(minute));
+
     String eventDate = widget.event.date;
     String year = eventDate.split("-")[0];
     String month = eventDate.split("-")[1];
@@ -146,12 +144,12 @@ class _EditEventFormState extends State<EditEventForm> {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   DateTime? newDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime(int.parse(year),int.parse(month),int.parse(day)),
+                      initialDate: DateTime(
+                          int.parse(year), int.parse(month), int.parse(day)),
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2023));
                   if (newDate == null) return;
                   setState(() {
-                    selectedDate = newDate;
                     getDate = DateFormat('yyyy-MM-dd').format(newDate);
                     _dateController.text = getDate;
                   });
@@ -159,8 +157,6 @@ class _EditEventFormState extends State<EditEventForm> {
                 validator: (val) {
                   if (val != null && val.isEmpty) {
                     return 'Date cannot be empty.';
-                  } else if (selectedDate.isBefore(DateTime.now())) {
-                    return 'Only upcoming dates are accepted. Please check the date again.';
                   } else {
                     setState(() {
                       getDate = val.toString();
@@ -270,13 +266,13 @@ class _EditEventFormState extends State<EditEventForm> {
               ),
               getParticipants.isEmpty
                   ? Container(
-                padding: EdgeInsets.all(10),
-                alignment: Alignment.centerLeft,
-                child: const Text(
-                  "None Selected",
-                  style: TextStyle(color: Colors.black54),
-                ),
-              )
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        "None Selected",
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    )
                   : Container(),
               const SizedBox(height: 8.0),
               const Text(
@@ -363,9 +359,9 @@ class _EditEventFormState extends State<EditEventForm> {
                         _isProcessing = false;
                         Provider.of<EventProvider>(context, listen: false)
                             .alert(
-                            title: 'Successfully Updated',
-                            body: 'Event has been successfully updated',
-                            context: context);
+                                title: 'Successfully Updated',
+                                body: 'Event has been successfully updated',
+                                context: context);
                       });
                     } else {
                       print(0);
@@ -375,9 +371,9 @@ class _EditEventFormState extends State<EditEventForm> {
                   child: (!_isProcessing)
                       ? const Text("Update")
                       : const CircularProgressIndicator(
-                    valueColor:
-                    AlwaysStoppedAnimation<Color>(Colors.redAccent),
-                  ),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                        ),
                 ),
               )
             ],
