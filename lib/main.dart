@@ -1,16 +1,19 @@
+import 'dart:ui';
+
+import 'package:family_tree/providers/event_provider.dart';
+import 'package:family_tree/components/generation/list_view_generation.dart';
 import 'package:family_tree/providers/member_provider.dart';
-import 'package:family_tree/providers/history_provider.dart';
+import 'package:family_tree/screens/event/event_list_screen.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
-import 'package:family_tree/Model/history.dart';
-import 'package:family_tree/screens/history/history_list.dart';
+import 'package:family_tree/screens/generation/generation_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:family_tree/screens/history/add_history.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (create) => MemberProvider()),
+    ChangeNotifierProvider(create: (create) => EventProvider()),
   ], child: const MyApp()));
 }
 
@@ -63,99 +66,63 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body:  Container(
+        height: size.height,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.blue,Colors.white])),
+        child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Image.asset(
+                "assets/main_top.png",
+                width: size.width * 0.3,
               ),
-              onPressed: () {
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                "assets/login_bottom.png",
+                width: size.width * 0.4,
+              ),
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+              ),
+            ),
+            Positioned(
+              child: Container(
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/blood_line_with_icon.png"),
+                        //fit: BoxFit.cover,
+                      ),
+                  ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const Family(),
+                      builder: (context) =>const Family()
                   ),
                 );
               },
-              child: Text(
-                'Member',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {},
-              child: Text(
-                'Generation',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HistoryList(),
-                  ),
-                );
-              },
-              child: Text(
-                'History',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {
-
-              },
-              child: Text(
-                'Events',
-                style: TextStyle(fontSize: 20),
-              ),
             ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

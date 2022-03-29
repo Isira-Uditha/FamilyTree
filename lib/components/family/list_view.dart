@@ -3,6 +3,7 @@ import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/family/member/edit_member.dart';
 import 'package:flutter/material.dart';
+import 'package:giff_dialog/giff_dialog.dart';
 import 'package:provider/provider.dart';
 
 class MemberListView extends StatefulWidget {
@@ -34,6 +35,7 @@ class _MemberListViewState extends State<MemberListView> {
                 String dob = member['dob'];
                 String relationship = member['relationship'];
                 String description = member['description'];
+                String image = member['image'] ?? "";
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -41,13 +43,15 @@ class _MemberListViewState extends State<MemberListView> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>  EditMemberScreen(
-                              currentDocId: docId,
-                              currentName: name,
-                              currentDob: dob,
-                              currentAge: age,
-                              currentRelationship: relationship,
-                              currentDescription: description),
+                          builder: (context) => EditMemberScreen(
+                            currentDocId: docId,
+                            currentName: name,
+                            currentDob: dob,
+                            currentAge: age,
+                            currentRelationship: relationship,
+                            currentDescription: description,
+                            currentImage: image,
+                          ),
                         ),
                       );
                     },
@@ -75,14 +79,49 @@ class _MemberListViewState extends State<MemberListView> {
                                     setState(() {
                                       _isDeleted = true;
                                     });
-                                    await Member.deleteMember(docId: docId);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AssetGiffDialog(
+                                        image: Image.asset(
+                                          'assets/delete.gif',
+                                          fit: BoxFit.fill,
+                                        ),
+                                        title: const Text(
+                                          "Are you sure to delete?",
+                                          style: TextStyle(
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        description: const Text(
+                                          "This action cannot be undone. Your selected member will be removed permanently.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        entryAnimation: EntryAnimation.top,
+                                        buttonCancelColor: Colors.black12,
+                                        buttonOkColor: Colors.blueAccent,
+                                        onOkButtonPressed: () async {
+                                          await Member.deleteMember(docId: docId);
+                                          setState(() {
+                                            _isDeleted = false;
+                                            Navigator.pop(context);
+                                            Provider.of<MemberProvider>(context,
+                                                listen: false)
+                                                .alert(
+                                                title: 'Successfully Deleted',
+                                                body:
+                                                'Record has been successfully deleted',
+                                                context: context);
+                                          });
+                                        },
+                                      ),
+                                    );
                                     setState(() {
                                       _isDeleted = false;
-                                      Provider.of<MemberProvider>(context, listen: false)
-                                          .alert(
-                                          title: 'Successfully Deleted',
-                                          body: 'Record has been successfully deleted',
-                                          context: context);
                                     });
                                   },
                                 )),

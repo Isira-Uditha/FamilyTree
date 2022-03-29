@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('family');
@@ -10,6 +11,7 @@ class Member {
   final String age;
   final String relationship;
   final String description;
+  final String image;
 
   const Member({
     this.docId,
@@ -18,6 +20,7 @@ class Member {
     required this.age,
     required this.relationship,
     required this.description,
+    required this.image,
   });
 
 
@@ -31,6 +34,7 @@ class Member {
       "age": member.age,
       "relationship": member.relationship,
       "description": member.description,
+      "image": member.image
     };
 
     await documentReference
@@ -45,6 +49,14 @@ class Member {
     return memberCollection.snapshots();
   }
 
+  static Stream<QuerySnapshot> readByRelationship(String relationship) {
+    return _mainCollection.doc('1').collection('member').where("relationship", isEqualTo: relationship).snapshots();
+  }
+
+  static Stream<QuerySnapshot> readSiblings(String relationship) {
+    return _mainCollection.doc('1').collection('member').where("relationship", isEqualTo: relationship).snapshots();
+  }
+
   static Future<void> updateMember(Member member) async {
     DocumentReference documentReference =
     _mainCollection.doc('1').collection('member').doc(member.docId);
@@ -55,6 +67,7 @@ class Member {
       "age": member.age,
       "relationship": member.relationship,
       "description": member.description,
+      "image": member.image,
     };
 
     await documentReference

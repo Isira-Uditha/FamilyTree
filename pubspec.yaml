@@ -40,14 +40,15 @@ dependencies:
   intl: ^0.17.0
   firebase_auth: ^3.3.9
   provider: ^6.0.2
-  multi_select_flutter: ^4.0.0
-  giff_dialog: ^1.0.1
-  firebase_storage: ^10.2.9
   image_picker: ^0.8.4+11
   path_provider: ^2.0.9
   path: ^1.8.0
   permission_handler: ^9.2.0
+  firebase_storage: ^10.2.9
+  graphview: ^1.1.1
+  giff_dialog: ^1.0.1
   flutter_speed_dial: ^5.0.0+1
+  multi_select_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,20 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/generation/
+    - assets/user.png
+    - assets/blood line white.png
+    - assets/blood_line_drop_shadow_with_stroke.png
+    - assets/blood_line_black.png
+    - assets/family.png
+    - assets/login_bottom.png
+    - assets/main_top.png
+    - assets/blood_line _black_dim.png
+    - assets/blood_line _drop_shadow.png
+    - assets/blood_line_with_icon.png
+    - assets/delete.gif
+
   assets:
      - assets/history/
 

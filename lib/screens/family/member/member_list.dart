@@ -1,4 +1,5 @@
 import 'package:family_tree/components/family/list_view.dart';
+import 'package:family_tree/screens/family/family_tree.dart';
 import 'package:family_tree/screens/family/member/add_member.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,13 @@ class MemberList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const Family(),
+            ),
+          ),
         ),
         actions: [
           IconButton(
