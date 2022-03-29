@@ -96,7 +96,7 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                             )
                           : Image.file(
                               File(_image!.path),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                             ),
                     ),
                   ),

@@ -20,11 +20,11 @@ class EditHistoryForm extends StatefulWidget {
 
   const EditHistoryForm(
       {Key? key,
-        required this.topicFocusNode,
-        required this.historyDateFocusNode,
-        required this.allMembers,
-        required this.history,
-        required this.descriptionFocusNode})
+      required this.topicFocusNode,
+      required this.historyDateFocusNode,
+      required this.allMembers,
+      required this.history,
+      required this.descriptionFocusNode})
       : super(key: key);
 
   @override
@@ -66,7 +66,7 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
     getmembers = _selectedMembers;
   }
 
-  Future getImage() async{
+  Future getImage() async {
     final ImagePicker _picker = ImagePicker();
     final image = await _picker.pickImage(source: ImageSource.gallery);
 
@@ -86,24 +86,23 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
     return 'uploads/$fileName';
   }
 
-  Future<dynamic> loadFromStorage(
-      BuildContext context, String image) async {
+  Future<dynamic> loadFromStorage(BuildContext context, String image) async {
     return await FirebaseStorage.instance.ref().child(image).getDownloadURL();
   }
 
   Future<Widget> _getImage(BuildContext context, String image) async {
     Image m = const Image(
-      image: AssetImage('assets/history/history.jpg'),
-      fit: BoxFit.cover,
+      image: AssetImage('assets/history/download.png'),
+      fit: BoxFit.fill,
     );
-    if(widget.history.image != '')
-    {
-      await FireStorageService.loadFromStorage(context, image).then((downloadUrl) => {
-        m = Image.network(
-          downloadUrl.toString(),
-          fit: BoxFit.cover,
-        )
-      });
+    if (widget.history.image != '') {
+      await FireStorageService.loadFromStorage(context, image)
+          .then((downloadUrl) => {
+                m = Image.network(
+                  downloadUrl.toString(),
+                  fit: BoxFit.fill,
+                )
+              });
     }
     return m;
   }
@@ -115,24 +114,23 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
     String month = eventDate.split("-")[1];
     String day = eventDate.split("-")[2];
 
-
     return FutureBuilder(
-        future: _getImage(context, widget.history.image) ,
+        future: _getImage(context, widget.history.image),
         builder: (context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SingleChildScrollView(
-            child: Form(
-              key: _editHistoryFormKey,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
+          if (snapshot.connectionState == ConnectionState.done) {
+            return SingleChildScrollView(
+              child: Form(
+                key: _editHistoryFormKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRRect(
                             child: Container(
                               margin: EdgeInsets.all(20),
                               padding: EdgeInsets.all(6),
@@ -144,255 +142,255 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
                               child: (_image == null)
                                   ? snapshot.data
                                   : Image.file(
-                                File(_image!.path),
-                                fit: BoxFit.cover,
+                                      File(_image!.path),
+                                      fit: BoxFit.fill,
+                                    ),
+                            ),
+                            // ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 180.0, right: 0.4),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.camera_alt,
+                                size: 30.0,
                               ),
+                              onPressed: () async {
+                                setState(() {
+                                  _isUploding = true;
+                                });
+                                await getImage();
+                              },
                             ),
-                         // ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 180.0, right: 0.4),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.camera_alt,
-                              size: 30.0,
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                _isUploding = true;
-                              });
-                              await getImage();
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 8.0),
-                    const Text(
-                      "History Topic",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 22, 115, 177),
-                          fontSize: 19.0,
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      decoration: Provider.of<MemberProvider>(
-                          context, listen: false)
-                          .inputDecoration(),
-                      controller: _topicController,
-                      focusNode: widget.topicFocusNode,
-                      onSaved: (String? val) {},
-                      textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.text,
-                      validator: (val) {
-                        if (val != null && val.isEmpty) {
-                          return 'Topic cannot be empty.';
-                        } else {
-                          setState(() {
-                            gettopic = val.toString();
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 15.0),
-                    const Text(
-                      "History Date",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 22, 115, 177),
-                          fontSize: 19.0,
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      decoration: Provider.of<MemberProvider>(
-                          context, listen: false)
-                          .inputDecoration(pIcon: 'Search'),
-                      controller: _historyDateController,
-                      focusNode: widget.historyDateFocusNode,
-                      onSaved: (String? value) {},
-                      textInputAction: TextInputAction.done,
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime? newDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime(int.parse(year),int.parse(month),int.parse(day)),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now());
-                        if (newDate == null) return;
-                        setState(() {
-                          gethistoryDate =
-                              DateFormat('yyyy-MM-dd').format(newDate);
-                          setState(() {
-                            _historyDateController.text = gethistoryDate;
-                          }
-                          );
-                        });
-                      },
-                      validator: (val) {
-                        if (val != null && val.isEmpty) {
-                          return 'History date cannot be empty.';
-                        } else {
-                          setState(() {
-                            gethistoryDate = val.toString();
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 20.0),
-                    MultiSelectDialogField(
-                        items: widget.allMembers
-                            .map((e) => MultiSelectItem(e, e.name))
-                            .toList(),
-                        initialValue: _selectedMembers,
-                        title: const Text("Members"),
-                        selectedColor: Colors.blue,
-                        validator: (values) {
-                          if (values == null || values.isEmpty) {
-                            return "Members can not be empty";
-                          }
-                        },
-                        searchable: true,
-                        decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8.0),
-                            //   borderRadius: BorderRadius.all(Radius.circular(40)),
-                            border: Border.all(
-                              color: Colors.blue,
-                              width: 2,
-                            )),
-                        buttonIcon: const Icon(
-                          Icons.family_restroom,
-                          color: Colors.blue,
-                        ),
-                        buttonText: const Text(
-                          "Add Members",
-                          style: TextStyle(
-                              fontSize: 19,
-                              color: Color.fromARGB(255, 22, 115, 177),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        onConfirm: (results) {
-                          _selectedMembers = results.cast<Member>();
-                          setState(() {
-                            _selectedMembers = _selectedMembers;
-                          });
-                          getmembers = [];
-                          getmembers.addAll(_selectedMembers);
-                        },
-                        chipDisplay: MultiSelectChipDisplay(
-                          onTap: (value) {
-                            setState(() {
-                              _selectedMembers.remove(value);
-                            });
-                          },
-                        )),
-                    getmembers.isEmpty
-                        ? Container(
-                        padding: EdgeInsets.all(10),
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          "None selected",
-                          style: TextStyle(color: Colors.black54),
-                        ))
-                        : Container(),
-                    const SizedBox(height: 8.0),
-                    const Text(
-                      "Description",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 22, 115, 177),
-                          fontSize: 19.0,
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8.0),
-                    TextFormField(
-                      decoration: Provider.of<MemberProvider>(
-                          context, listen: false)
-                          .inputDecoration(),
-                      maxLines: 4,
-                      controller: _descriptionController,
-                      focusNode: widget.descriptionFocusNode,
-                      onSaved: (String? value) {},
-                      textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.text,
-                      validator: (val) {
-                        setState(() {
-                          getDescription = val.toString();
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 8.0),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          widget.topicFocusNode.unfocus();
-                          widget.historyDateFocusNode.unfocus();
-                          widget.descriptionFocusNode.unfocus();
-
-                          if (_editHistoryFormKey.currentState!.validate()) {
-                            setState(() {
-                              _isProcessing = true;
-                            });
-
-                            String imagePath = widget.history.image;
-
-                            if (_isUploding) {
-                                imagePath = await uploadImage();
-                            }
-
-                            History updatedHistory = History(
-                                historyID: widget.history.historyID,
-                                topic: gettopic,
-                                historyDate: gethistoryDate,
-                                description: getDescription,
-                                image: imagePath,
-                                members: getmembers);
-
-                            await History.updateHistory(updatedHistory);
-
-                            setState(() {
-                              _isProcessing = false;
-                              _isUploding = false;
-                              Provider.of<MemberProvider>(
-                                  context, listen: false)
-                                  .alert(
-                                  title: 'Successfully Updated',
-                                  body: 'Record has been successfully updated',
-                                  context: context);
-                            });
-                          } else {
-                            print(0);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(maximumSize: Size
-                            .infinite),
-                        child: (!_isProcessing)
-                            ? const Text('Update')
-                            : const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.redAccent,
-                          ),
-                        ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
+                      const SizedBox(height: 8.0),
+                      const Text(
+                        "History Topic",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 22, 115, 177),
+                            fontSize: 19.0,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8.0),
+                      TextFormField(
+                        decoration:
+                            Provider.of<MemberProvider>(context, listen: false)
+                                .inputDecoration(),
+                        controller: _topicController,
+                        focusNode: widget.topicFocusNode,
+                        onSaved: (String? val) {},
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.text,
+                        validator: (val) {
+                          if (val != null && val.isEmpty) {
+                            return 'Topic cannot be empty.';
+                          } else {
+                            setState(() {
+                              gettopic = val.toString();
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 15.0),
+                      const Text(
+                        "History Date",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 22, 115, 177),
+                            fontSize: 19.0,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8.0),
+                      TextFormField(
+                        decoration:
+                            Provider.of<MemberProvider>(context, listen: false)
+                                .inputDecoration(pIcon: 'Search'),
+                        controller: _historyDateController,
+                        focusNode: widget.historyDateFocusNode,
+                        onSaved: (String? value) {},
+                        textInputAction: TextInputAction.done,
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime(int.parse(year),
+                                  int.parse(month), int.parse(day)),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now());
+                          if (newDate == null) return;
+                          setState(() {
+                            gethistoryDate =
+                                DateFormat('yyyy-MM-dd').format(newDate);
+                            setState(() {
+                              _historyDateController.text = gethistoryDate;
+                            });
+                          });
+                        },
+                        validator: (val) {
+                          if (val != null && val.isEmpty) {
+                            return 'History date cannot be empty.';
+                          } else {
+                            setState(() {
+                              gethistoryDate = val.toString();
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20.0),
+                      MultiSelectDialogField(
+                          items: widget.allMembers
+                              .map((e) => MultiSelectItem(e, e.name))
+                              .toList(),
+                          initialValue: _selectedMembers,
+                          title: const Text("Members"),
+                          selectedColor: Colors.blue,
+                          validator: (values) {
+                            if (values == null || values.isEmpty) {
+                              return "Members can not be empty";
+                            }
+                          },
+                          searchable: true,
+                          decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8.0),
+                              //   borderRadius: BorderRadius.all(Radius.circular(40)),
+                              border: Border.all(
+                                color: Colors.blue,
+                                width: 2,
+                              )),
+                          buttonIcon: const Icon(
+                            Icons.family_restroom,
+                            color: Colors.blue,
+                          ),
+                          buttonText: const Text(
+                            "Add Members",
+                            style: TextStyle(
+                                fontSize: 19,
+                                color: Color.fromARGB(255, 22, 115, 177),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onConfirm: (results) {
+                            _selectedMembers = results.cast<Member>();
+                            setState(() {
+                              _selectedMembers = _selectedMembers;
+                            });
+                            getmembers = [];
+                            getmembers.addAll(_selectedMembers);
+                          },
+                          chipDisplay: MultiSelectChipDisplay(
+                            onTap: (value) {
+                              setState(() {
+                                _selectedMembers.remove(value);
+                              });
+                            },
+                          )),
+                      getmembers.isEmpty
+                          ? Container(
+                              padding: EdgeInsets.all(10),
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                "None selected",
+                                style: TextStyle(color: Colors.black54),
+                              ))
+                          : Container(),
+                      const SizedBox(height: 8.0),
+                      const Text(
+                        "Description",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 22, 115, 177),
+                            fontSize: 19.0,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8.0),
+                      TextFormField(
+                        decoration:
+                            Provider.of<MemberProvider>(context, listen: false)
+                                .inputDecoration(),
+                        maxLines: 4,
+                        controller: _descriptionController,
+                        focusNode: widget.descriptionFocusNode,
+                        onSaved: (String? value) {},
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.text,
+                        validator: (val) {
+                          setState(() {
+                            getDescription = val.toString();
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 8.0),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            widget.topicFocusNode.unfocus();
+                            widget.historyDateFocusNode.unfocus();
+                            widget.descriptionFocusNode.unfocus();
+
+                            if (_editHistoryFormKey.currentState!.validate()) {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+
+                              String imagePath = widget.history.image;
+
+                              if (_isUploding) {
+                                imagePath = await uploadImage();
+                              }
+
+                              History updatedHistory = History(
+                                  historyID: widget.history.historyID,
+                                  topic: gettopic,
+                                  historyDate: gethistoryDate,
+                                  description: getDescription,
+                                  image: imagePath,
+                                  members: getmembers);
+
+                              await History.updateHistory(updatedHistory);
+
+                              setState(() {
+                                _isProcessing = false;
+                                _isUploding = false;
+                                Provider.of<MemberProvider>(context,
+                                        listen: false)
+                                    .alert(
+                                        title: 'Successfully Updated',
+                                        body:
+                                            'Record has been successfully updated',
+                                        context: context);
+                              });
+                            } else {
+                              print(0);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              maximumSize: Size.infinite),
+                          child: (!_isProcessing)
+                              ? const Text('Update')
+                              : const CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.redAccent,
+                                  ),
+                                ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
-            ),
-          );
-        }
-      });
-    }
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+              ),
+            );
+          }
+        });
   }
-
-
+}
