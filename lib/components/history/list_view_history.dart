@@ -49,6 +49,8 @@ class _HistoryListViewState extends State<HistoryListView> {
                     String dob = element['dob'];
                     String relationship = element['relationship'];
                     String description = element['description'];
+                    String image = element['image'] ?? "";
+
 
                     Member familyMember = Member(
                         docId: docId,
@@ -56,7 +58,7 @@ class _HistoryListViewState extends State<HistoryListView> {
                         dob: dob,
                         age: age,
                         relationship: relationship,
-                        description: description);
+                        description: description, image: image);
                     members.add(familyMember);
                     memberList.forEach((key, value) {
                       if (key == docId) {

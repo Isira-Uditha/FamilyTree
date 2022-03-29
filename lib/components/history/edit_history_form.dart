@@ -133,11 +133,13 @@ class _EditHistoryFormState extends State<EditHistoryForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ClipRRect(
-                          //radius: 100,
-                          //backgroundColor: Colors.blue,
-                          //child: ClipOval(
-                            child: SizedBox(
-                              width: 347.0,
+                            child: Container(
+                              margin: EdgeInsets.all(20),
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  border: Border.all(color: Colors.blueAccent)),
+                              width: 300.0,
                               height: 200.0,
                               child: (_image == null)
                                   ? snapshot.data
