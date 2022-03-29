@@ -4,6 +4,7 @@ import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/history/edit_history.dart';
 import 'package:flutter/material.dart';
+import 'package:giff_dialog/giff_dialog.dart';
 import 'package:provider/provider.dart';
 
 class HistoryListView extends StatefulWidget {
@@ -28,14 +29,13 @@ class _HistoryListViewState extends State<HistoryListView> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 var history =
-                snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                    snapshot.data!.docs[index].data() as Map<String, dynamic>;
                 String historyID = snapshot.data!.docs[index].id;
                 String topic = history['topic'];
                 String historyDate = history['historyDate'];
                 String image = history['image'] ?? "";
                 String description = history['description'];
-                final memberList =
-                history['members'] as Map<dynamic, dynamic>;
+                final memberList = history['members'] as Map<dynamic, dynamic>;
 
                 final List<Member> members = [];
                 final List<Member> currentMembers = [];
@@ -51,14 +51,14 @@ class _HistoryListViewState extends State<HistoryListView> {
                     String description = element['description'];
                     String image = element['image'] ?? "";
 
-
                     Member familyMember = Member(
                         docId: docId,
                         name: name,
                         dob: dob,
                         age: age,
                         relationship: relationship,
-                        description: description, image: image);
+                        description: description,
+                        image: image);
                     members.add(familyMember);
                     memberList.forEach((key, value) {
                       if (key == docId) {
@@ -74,7 +74,7 @@ class _HistoryListViewState extends State<HistoryListView> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>  EditHistoryScreen(
+                          builder: (context) => EditHistoryScreen(
                               currenthistoryID: historyID,
                               currenttopic: topic,
                               currenthistoryDate: historyDate,
@@ -99,27 +99,75 @@ class _HistoryListViewState extends State<HistoryListView> {
                           subtitle: Text(historyDate),
                           trailing: _isDeleted
                               ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.redAccent,
-                            ),
-                          )
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.redAccent,
+                                  ),
+                                )
                               : IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () async {
-                              setState(() {
-                                _isDeleted = true;
-                              });
-                              await History.deleteHistory(historyID: historyID);
-                              setState(() {
-                                _isDeleted = false;
-                                Provider.of<MemberProvider>(context, listen: false)
-                                    .alert(
-                                    title: 'Successfully Deleted',
-                                    body: 'Record has been successfully deleted',
-                                    context: context);
-                              });
-                            },
-                          )),
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () async {
+                                    setState(() {
+                                      _isDeleted = true;
+                                    });
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AssetGiffDialog(
+                                        image: Image.asset(
+                                          'assets/delete.gif',
+                                          fit: BoxFit.fill,
+                                        ),
+                                        title: const Text(
+                                          "Are you sure to delete?",
+                                          style: TextStyle(
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        description: const Text(
+                                          "This action cannot be undone. Your selected history record will be removed permanently.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        entryAnimation: EntryAnimation.top,
+                                        buttonCancelColor: Colors.black12,
+                                        buttonOkColor: Colors.blueAccent,
+                                        onOkButtonPressed: () async {
+                                          await History.deleteHistory(historyID: historyID);
+                                          setState(() {
+                                            _isDeleted = false;
+                                            Navigator.pop(context);
+                                            Provider.of<MemberProvider>(context,
+                                                listen: false)
+                                                .alert(
+                                                title: 'Successfully Deleted',
+                                                body:
+                                                'Record has been successfully deleted',
+                                                context: context);
+                                          });
+                                        },
+                                      ),
+                                    );
+                                    setState(() {
+                                      _isDeleted = false;
+                                    });
+                                    // await History.deleteHistory(
+                                    //     historyID: historyID);
+                                    // setState(() {
+                                    //   _isDeleted = false;
+                                    //   Provider.of<MemberProvider>(context,
+                                    //           listen: false)
+                                    //       .alert(
+                                    //           title: 'Successfully Deleted',
+                                    //           body:
+                                    //               'Record has been successfully deleted',
+                                    //           context: context);
+                                    // }
+                                    //);
+                                  },
+                                )),
                     ),
                   ),
                 );
