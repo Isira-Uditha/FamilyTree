@@ -153,19 +153,6 @@ class _HistoryListViewState extends State<HistoryListView> {
                                     setState(() {
                                       _isDeleted = false;
                                     });
-                                    // await History.deleteHistory(
-                                    //     historyID: historyID);
-                                    // setState(() {
-                                    //   _isDeleted = false;
-                                    //   Provider.of<MemberProvider>(context,
-                                    //           listen: false)
-                                    //       .alert(
-                                    //           title: 'Successfully Deleted',
-                                    //           body:
-                                    //               'Record has been successfully deleted',
-                                    //           context: context);
-                                    // }
-                                    //);
                                   },
                                 )),
                     ),
