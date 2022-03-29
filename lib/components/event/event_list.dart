@@ -20,6 +20,15 @@ class _EventListState extends State<EventList> {
 
   @override
   Widget build(BuildContext context) {
+    final _today = DateTime.now();
+
+    // Calculating the days between
+    int daysBetween(DateTime fromDate, DateTime toDate) {
+      fromDate = DateTime(fromDate.year, fromDate.month, fromDate.day);
+      toDate = DateTime(toDate.year, toDate.month, toDate.day);
+      return (toDate.difference(fromDate).inHours / 24).round();
+    }
+
     return StreamBuilder<QuerySnapshot>(
         stream: Event.readEvents(),
         builder: (context, snapshot) {
@@ -37,6 +46,16 @@ class _EventListState extends State<EventList> {
                   String time = event['time'];
                   String location = event['location'];
                   String description = event['description'];
+                  String year = event['date'].split("-")[0];
+                  String month = event['date'].split("-")[1];
+                  String day = event['date'].split("-")[2];
+                  DateTime eventDate = DateTime(int.parse(year), int.parse(month), int.parse(day));
+                  var difference = daysBetween(_today, eventDate);
+
+                  //Skipping the minus remaining days
+                  if(difference < 0) {
+                    difference = 0;
+                  }
 
                   final participantList =
                       event['participants'] as Map<dynamic, dynamic>;
@@ -100,7 +119,7 @@ class _EventListState extends State<EventList> {
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Text('${name}'),
                           ),
-                          subtitle: Text('${date} at ${location}'),
+                          subtitle: Text('${difference} days for the event at ${location}'),
                           trailing: _isDeleted
                               ? const CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
