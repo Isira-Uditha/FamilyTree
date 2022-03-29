@@ -7,20 +7,20 @@ class EditHistoryScreen extends StatefulWidget {
   final String currenthistoryID;
   final String currenttopic;
   final String currenthistoryDate;
-  final String currenthistoryImage;
   final List<Member> currentMembers;
   final String currentDescription;
   final List<Member> allMembers;
+  final String currentImage;
 
   const EditHistoryScreen(
       {Key? key,
         required this.currenthistoryID,
         required this.currenttopic,
         required this.currenthistoryDate,
-        required this.currenthistoryImage,
         required this.currentMembers,
         required this.currentDescription,
-        required this.allMembers})
+        required this.allMembers,
+        required this.currentImage})
       : super(key: key);
 
   @override
@@ -30,7 +30,6 @@ class EditHistoryScreen extends StatefulWidget {
 class _EditHistoryScreenState extends State<EditHistoryScreen> {
   final FocusNode _topicFocusNode = FocusNode();
   final FocusNode _historyDateFocusNode = FocusNode();
-  final FocusNode _historyImageFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
 
   @override
@@ -39,7 +38,6 @@ class _EditHistoryScreenState extends State<EditHistoryScreen> {
       onTap: () => {
         _topicFocusNode.unfocus(),
         _historyDateFocusNode.unfocus(),
-        _historyImageFocusNode.unfocus(),
         _descriptionFocusNode.unfocus(),
       },
       child: Scaffold(
@@ -61,13 +59,12 @@ class _EditHistoryScreenState extends State<EditHistoryScreen> {
                 child: EditHistoryForm(
                   topicFocusNode: _topicFocusNode,
                   historyDateFocusNode: _historyDateFocusNode,
-                  historyImageFocusNode: _historyImageFocusNode,
                   descriptionFocusNode: _descriptionFocusNode,
                   history: History(
                       historyID: widget.currenthistoryID,
                       topic: widget.currenttopic,
                       historyDate: widget.currenthistoryDate,
-                      historyImage: widget.currenthistoryImage,
+                      image: widget.currentImage,
                       members: widget.currentMembers,
                       description: widget.currentDescription),
                       allMembers: widget.allMembers))

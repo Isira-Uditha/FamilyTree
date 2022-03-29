@@ -1,7 +1,4 @@
-
-//import 'dart:html';
 import 'dart:io';
-
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/Model/history.dart';
 import 'package:family_tree/providers/member_provider.dart';
@@ -13,7 +10,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
-
 class AddHistoryForm extends StatefulWidget {
   final FocusNode topicFocusNode;
   final FocusNode historyDateFocusNode;
@@ -22,10 +18,10 @@ class AddHistoryForm extends StatefulWidget {
 
   const AddHistoryForm(
       {Key? key,
-        required this.topicFocusNode,
-        required this.historyDateFocusNode,
-        required this.allMembers,
-        required this.descriptionFocusNode})
+      required this.topicFocusNode,
+      required this.historyDateFocusNode,
+      required this.allMembers,
+      required this.descriptionFocusNode})
       : super(key: key);
 
   @override
@@ -68,7 +64,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
   }
 
   List<Member> members = [];
-
   List<Member> _selectedMembers = [];
 
   @override
@@ -85,27 +80,28 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 100,
-                    backgroundColor: Colors.blue,
-                    child: ClipOval(
-                      child: SizedBox(
-                        width: 180.0,
-                        height: 180.0,
-                        child: (_image == null)
-                            ? const Image(
-                          image: AssetImage('assets/user.png'),
-                          fit: BoxFit.cover,
-                        )
-                            : Image.file(
-                          File(_image!.path),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                  ClipRRect(
+                    child: Container(
+                      margin: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(color: Colors.blueAccent)),
+                      width: 300.0,
+                      height: 200.0,
+                      child: (_image == null)
+                          ? const Image(
+                              image: AssetImage('assets/history/download.png'),
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(_image!.path),
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 60.0),
+                    padding: const EdgeInsets.only(top: 180.0, right: 0.4),
                     child: IconButton(
                       icon: const Icon(
                         Icons.camera_alt,
@@ -115,7 +111,6 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                         setState(() {
                           _isUploding = true;
                         });
-
                         await getImage();
                       },
                     ),
@@ -170,10 +165,11 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                 onTap: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   DateTime? newDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2023));
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
                   if (newDate == null) return;
                   setState(() {
                     gethistoryDate = DateFormat('yyyy-MM-dd').format(newDate);
@@ -239,12 +235,12 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                   )),
               _selectedMembers.isEmpty
                   ? Container(
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "None selected",
-                    style: TextStyle(color: Colors.black54),
-                  ))
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        "None selected",
+                        style: TextStyle(color: Colors.black54),
+                      ))
                   : Container(),
               SizedBox(height: 8.0),
               const Text(
@@ -292,11 +288,11 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
                       }
 
                       History newHistory = History(
-                          topic: gettopic,
-                          historyDate: gethistoryDate,
-                          members: getmembers,
-                          description: getDescription,
-                          image: imagePath,
+                        topic: gettopic,
+                        historyDate: gethistoryDate,
+                        members: getmembers,
+                        description: getDescription,
+                        image: imagePath,
                       );
 
                       await History.addHistory(newHistory);
@@ -307,21 +303,22 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
 
                         Provider.of<MemberProvider>(context, listen: false)
                             .alert(
-                            title: 'Successfully Inserted',
-                            body: 'Record has been successfully inserted',
-                            context: context);
-
+                                title: 'Successfully Inserted',
+                                body: 'Record has been successfully inserted',
+                                context: context);
                       });
                     } else {
                       print(0);
                     }
                   },
                   style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
-                  child: (!_isProcessing)? Text('Save') : const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.redAccent,
-                    ),
-                  ),
+                  child: (!_isProcessing)
+                      ? Text('Save')
+                      : const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.redAccent,
+                          ),
+                        ),
                 ),
               )
             ],

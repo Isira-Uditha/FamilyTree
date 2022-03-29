@@ -3,8 +3,6 @@ import 'package:family_tree/components/history/list_view_history.dart';
 import 'package:family_tree/screens/history/add_history.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/family/list_view.dart';
-
 class HistoryList extends StatelessWidget {
   const HistoryList({Key? key}) : super(key: key);
 

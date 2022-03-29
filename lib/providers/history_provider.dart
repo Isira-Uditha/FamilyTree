@@ -82,5 +82,4 @@ class HistoryProvider extends ChangeNotifier {
         }
     );
   }
-
 }

@@ -21,7 +21,6 @@ class History {
     required this.image,
   });
 
-
   static Future<void> addHistory(History history) async {
     DocumentReference documentReference =
     _mainCollection.doc('1').collection('history').doc();
