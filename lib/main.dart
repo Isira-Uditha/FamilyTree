@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:family_tree/providers/event_provider.dart';
 import 'package:family_tree/components/generation/list_view_generation.dart';
+import 'package:family_tree/providers/generation_provider.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/event/event_list_screen.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
@@ -14,6 +15,7 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (create) => MemberProvider()),
     ChangeNotifierProvider(create: (create) => EventProvider()),
+    ChangeNotifierProvider(create: (create) => GenerationProvider()),
   ], child: const MyApp()));
 }
 
