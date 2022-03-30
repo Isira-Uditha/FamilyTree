@@ -1,11 +1,8 @@
-import 'dart:collection';
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_tree/Model/generation.dart';
 import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/Model/quality.dart';
 import 'package:family_tree/providers/generation_provider.dart';
-import 'package:family_tree/providers/member_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:giff_dialog/giff_dialog.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -66,7 +63,7 @@ class _AddGenerationFormState extends State<AddGenerationForm> {
               ),
               const SizedBox(height: 8.0),
               TextFormField(
-                decoration: Provider.of<MemberProvider>(context, listen: false)
+                decoration: Provider.of<GenerationProvider>(context, listen: false)
                     .inputDecoration(),
                 controller: _nameController,
                 focusNode: widget.nameFocusNode,
@@ -258,7 +255,7 @@ class _AddGenerationFormState extends State<AddGenerationForm> {
               ),
               const SizedBox(height: 8.0),
               TextFormField(
-                decoration: Provider.of<MemberProvider>(context, listen: false)
+                decoration: Provider.of<GenerationProvider>(context, listen: false)
                     .inputDecoration(),
                 maxLines: 4,
                 controller: _descriptionController,
