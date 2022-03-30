@@ -46,7 +46,7 @@ class AddHistoryScreen extends StatelessWidget {
                               )),
                           buttonOkColor: Colors.blueAccent,
                           image: Image.asset(
-                            'assets/generation/genZ.gif',
+                            'assets/historyGif.gif',
                             fit: BoxFit.fill,
                           ),
                           title: const Text(
