@@ -1,8 +1,14 @@
+import 'package:family_tree/Model/member.dart';
 import 'package:family_tree/components/event/add_event_form.dart';
 import 'package:flutter/material.dart';
 
 class AddEventScreen extends StatelessWidget {
-  AddEventScreen({Key? key}) : super(key: key);
+  final List<Member> allParticipants;
+
+  AddEventScreen({
+    Key? key,
+    required this.allParticipants,
+  }) : super(key: key);
 
   final FocusNode _eventNameFocusNode = FocusNode();
   final FocusNode _dateFocusNode = FocusNode();
@@ -42,6 +48,7 @@ class AddEventScreen extends StatelessWidget {
                 timeFocusNode: _timeFocusNode,
                 descriptionFocusNode: _descriptionFocusNode,
                 locationFocusNode: _locationFocusNode,
+                allParticipants: allParticipants,
               ))
             ],
           ),

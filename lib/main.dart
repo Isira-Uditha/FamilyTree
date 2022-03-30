@@ -1,9 +1,7 @@
 import 'dart:ui';
 
-import 'package:animated_background/animated_background.dart';
 import 'package:family_tree/providers/event_provider.dart';
 import 'package:family_tree/components/generation/list_view_generation.dart';
-import 'package:family_tree/providers/generation_provider.dart';
 import 'package:family_tree/providers/member_provider.dart';
 import 'package:family_tree/screens/event/event_list_screen.dart';
 import 'package:family_tree/screens/family/family_tree.dart';
@@ -16,7 +14,6 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (create) => MemberProvider()),
     ChangeNotifierProvider(create: (create) => EventProvider()),
-    ChangeNotifierProvider(create: (create) => GenerationProvider()),
   ], child: const MyApp()));
 }
 
@@ -47,7 +44,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: const MyHomePage(title: "Family Tree"),
+              home: const MyHomePage(title: 'Family Tree'),
             );
           }
           return const CircularProgressIndicator(
@@ -71,14 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
+      body:  Container(
         height: size.height,
         width: double.infinity,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.blue, Colors.white])),
+                colors: [Colors.blue,Colors.white])),
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -106,24 +103,26 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Positioned(
               child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/blood_line_with_icon.png"),
-                    //fit: BoxFit.cover,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/blood_line_with_icon.png"),
+                        //fit: BoxFit.cover,
+                      ),
                   ),
-                ),
               ),
             ),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Family()),
+                  MaterialPageRoute(
+                      builder: (context) =>const Family()
+                  ),
                 );
               },
             ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
