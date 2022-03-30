@@ -80,6 +80,10 @@ flutter:
     - assets/blood line white.png
     - assets/blood_line_red.png
     - assets/family.png
+    - assets/delete.gif
+    - assets/blood_line_with_icon.png
+    - assets/login_bottom.png
+    - assets/main_top.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

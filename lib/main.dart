@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:animated_background/animated_background.dart';
 import 'package:family_tree/providers/event_provider.dart';
 import 'package:family_tree/components/generation/list_view_generation.dart';
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: const MyCoverPage(),
+              home: const MyHomePage(title: "Family Tree"),
             );
           }
           return const CircularProgressIndicator(
@@ -67,163 +69,61 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        height: size.height,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.blue, Colors.white])),
+        child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Image.asset(
+                "assets/main_top.png",
+                width: size.width * 0.3,
               ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Family(),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                "assets/login_bottom.png",
+                width: size.width * 0.4,
+              ),
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+              ),
+            ),
+            Positioned(
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/blood_line_with_icon.png"),
+                    //fit: BoxFit.cover,
                   ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Family()),
                 );
               },
-              child: Text(
-                'Member',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => GenerationList(),
-                  ),
-                );
-              },
-              child: Text(
-                'Generation',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {},
-              child: Text(
-                'History',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-              height: 10.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                primary: Color.fromRGBO(28, 136, 231, 0.8),
-                fixedSize: Size(200, 100),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const EventListScreen(),
-                  ),
-                );
-              },
-              child: Text(
-                'Events',
-                style: TextStyle(fontSize: 20),
-              ),
             ),
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class MyCoverPage extends StatefulWidget {
-  const MyCoverPage({Key? key}) : super(key: key);
-
-  @override
-  State<MyCoverPage> createState() => _MyCoverPageState();
-}
-
-class _MyCoverPageState extends State<MyCoverPage> with TickerProviderStateMixin {
-
-  ParticleOptions particleOptions = ParticleOptions(
-    image: Image.asset('assets/family.png',height: 100, width: 200),
-    //baseColor: Colors.blue,
-    spawnOpacity: 0.0,
-    opacityChangeRate: 1.25,
-    minOpacity: 0.7,
-    maxOpacity: 0.9,
-    spawnMinSpeed: 30.0,
-    spawnMaxSpeed: 70.0,
-    spawnMinRadius: 7.0,
-    spawnMaxRadius: 15.0,
-    particleCount: 50,);
-
-  var particlePaint = Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey,
-      //backgroundColor: Color.fromRGBO(28, 169, 201, 0.9),
-      body:   AnimatedBackground(
-        behaviour: RandomParticleBehaviour( options: particleOptions,
-          paint: particlePaint,),
-        vsync: this,
-        child: Center(
-          child: Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/blood_line_red.png"),
-                  //fit: BoxFit.cover,
-                )
-            ),
-            child:
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const MyHomePage(title: 'Family Tree')
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:family_tree/Model/quality.dart';
 import 'package:family_tree/providers/generation_provider.dart';
 import 'package:family_tree/screens/generation/edit_generation.dart';
 import 'package:flutter/material.dart';
+import 'package:giff_dialog/giff_dialog.dart';
 import 'package:provider/provider.dart';
 
 class GenerationListView extends StatefulWidget {
@@ -125,17 +126,52 @@ class _GenerationListViewState extends State<GenerationListView> {
                                     setState(() {
                                       _isDeleted = true;
                                     });
-                                    await Generation.deleteGeneration(
-                                        docId: docId);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AssetGiffDialog(
+                                        image: Image.asset(
+                                          'assets/delete.gif',
+                                          fit: BoxFit.fill,
+                                        ),
+                                        title: const Text(
+                                          "Are you sure to delete?",
+                                          style: TextStyle(
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        description: const Text(
+                                          "This action cannot be undone. Your selected data will be removed permanently.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        entryAnimation: EntryAnimation.top,
+                                        buttonCancelColor: Colors.black12,
+                                        buttonOkColor: Colors.blueAccent,
+                                        onOkButtonPressed: () async {
+                                          await Generation.deleteGeneration(
+                                              docId: docId);
+                                          Navigator.pop(context);
+                                          Provider.of<GenerationProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .alert(
+                                                  title: 'Successfully Deleted',
+                                                  body:
+                                                      'Generation has been deleted successfully',
+                                                  context: context);
+                                        },
+                                        onCancelButtonPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    );
+
                                     setState(() {
                                       _isDeleted = false;
-                                      Provider.of<GenerationProvider>(context,
-                                              listen: false)
-                                          .alert(
-                                              title: 'Successfully Deleted',
-                                              body:
-                                                  'Record has been successfully deleted',
-                                              context: context);
                                     });
                                   },
                                 )),
