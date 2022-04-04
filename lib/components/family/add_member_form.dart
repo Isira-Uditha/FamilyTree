@@ -58,6 +58,7 @@ class _AddMemberFormState extends State<AddMemberForm> {
 
   XFile? _image;
 
+  //Select an image from the gallery
   Future getImage() async {
     final ImagePicker _picker = ImagePicker();
     final image = await _picker.pickImage(source: ImageSource.gallery);
@@ -67,6 +68,8 @@ class _AddMemberFormState extends State<AddMemberForm> {
     });
   }
 
+  //Reference to the https://ptyagicodecamp.github.io/uploading-image-to-firebase-storage-in-flutter-app-android-ios.html
+  //This function is required to create a firestore instance and upload the selected image to the firestore database
   Future uploadImage() async {
     String fileName = basename(_image!.path);
     FirebaseStorage storage = FirebaseStorage.instance;
