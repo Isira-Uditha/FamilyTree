@@ -53,7 +53,7 @@ class AddEventScreen extends StatelessWidget {
                               )),
                           buttonOkColor: Colors.blueAccent,
                           image: Image.asset(
-                            'assets/generation/genZ.gif',
+                            'assets/event.gif',
                             fit: BoxFit.fill,
                           ),
                           title: const Text(

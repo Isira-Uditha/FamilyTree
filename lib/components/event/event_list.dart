@@ -23,6 +23,8 @@ class _EventListState extends State<EventList> {
     final _today = DateTime.now();
 
     // Calculating the days between
+    // Since toDate.difference(fromDate).inDay; function has a bug, had to use this function from stackoverflow
+    // https://stackoverflow.com/questions/52713115/flutter-find-the-number-of-days-between-two-dates
     int daysBetween(DateTime fromDate, DateTime toDate) {
       fromDate = DateTime(fromDate.year, fromDate.month, fromDate.day);
       toDate = DateTime(toDate.year, toDate.month, toDate.day);

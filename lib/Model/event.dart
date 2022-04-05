@@ -23,6 +23,7 @@ class Event {
       required this.location,
       required this.description});
 
+  // Function refers to adding new Event to the databse
   static Future<void> addEvent(Event event) async {
     DocumentReference documentReference =
         _mainCollection.doc('1').collection('event').doc();
@@ -54,6 +55,7 @@ class Event {
     return eventCollection.snapshots();
   }
 
+  // Function refers to delete selected Event from the database
   static Future<void> deleteEvent({
     required String docId,
   }) async {
@@ -66,6 +68,7 @@ class Event {
         .catchError((e) => print(e));
   }
 
+  // Function refers to update the selected Event
   static Future<void> updateEvent(Event event) async {
     DocumentReference documentReference =
         _mainCollection.doc('1').collection('event').doc(event.docId);
