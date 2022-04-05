@@ -1,51 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:family_tree/Model/generation.dart';
+import 'package:family_tree/Model/history.dart';
 import 'package:family_tree/Model/member.dart';
-import 'package:family_tree/Model/quality.dart';
-import 'package:family_tree/providers/generation_provider.dart';
-import 'package:family_tree/screens/generation/edit_generation.dart';
+import 'package:family_tree/providers/member_provider.dart';
+import 'package:family_tree/screens/history/edit_history.dart';
 import 'package:flutter/material.dart';
 import 'package:giff_dialog/giff_dialog.dart';
 import 'package:provider/provider.dart';
 
-class GenerationListView extends StatefulWidget {
-  const GenerationListView({Key? key}) : super(key: key);
+class HistoryListView extends StatefulWidget {
+  const HistoryListView({Key? key}) : super(key: key);
 
   @override
-  _GenerationListViewState createState() => _GenerationListViewState();
+  _HistoryListViewState createState() => _HistoryListViewState();
 }
 
-class _GenerationListViewState extends State<GenerationListView> {
+class _HistoryListViewState extends State<HistoryListView> {
   bool _isDeleted = false;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Generation.readGenerations(),
+        stream: History.readHistory(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Text("Something went wrong");
+            return Text("Something went wrong");
           } else if (snapshot.hasData || snapshot.data != null) {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                var generation =
+                var history =
                     snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                String docId = snapshot.data!.docs[index].id;
-                String name = generation['name'];
-                String description = generation['description'];
-                String type = generation['type'];
-                final memberList =
-                    generation['members'] as Map<dynamic, dynamic>;
-                final strengthsList =
-                    generation["strengths"] as Map<dynamic, dynamic>;
-                final weaknessesList =
-                    generation["weaknesses"] as Map<dynamic, dynamic>;
+                String historyID = snapshot.data!.docs[index].id;
+                String topic = history['topic'];
+                String historyDate = history['historyDate'];
+                String image = history['image'] ?? "";
+                String description = history['description'];
+                final memberList = history['members'] as Map<dynamic, dynamic>;
 
                 final List<Member> members = [];
                 final List<Member> currentMembers = [];
-                final List<Strength> currentStrengths = [];
-                final List<Weaknesses> currentWeaknesses = [];
 
                 var list = Member.readMembers();
                 list.forEach((element) {
@@ -56,7 +49,7 @@ class _GenerationListViewState extends State<GenerationListView> {
                     String dob = element['dob'];
                     String relationship = element['relationship'];
                     String description = element['description'];
-                    String image = element['image'];
+                    String image = element['image'] ?? "";
 
                     Member familyMember = Member(
                         docId: docId,
@@ -75,30 +68,20 @@ class _GenerationListViewState extends State<GenerationListView> {
                   }
                 });
 
-                strengthsList.forEach((key, value) {
-                  currentStrengths.add(Strength(id: key, name: value));
-                });
-
-                weaknessesList.forEach((key, value) {
-                  currentWeaknesses.add(Weaknesses(id: key, name: value));
-                });
-
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => EditGenerationScreen(
-                            currentDocId: docId,
-                            currentName: name,
-                            currentMembers: currentMembers,
-                            currentStrengths: currentStrengths,
-                            currentWeaknesses: currentWeaknesses,
-                            currentDescription: description,
-                            allMembers: members,
-                            currentType: type,
-                          ),
+                          builder: (context) => EditHistoryScreen(
+                              currenthistoryID: historyID,
+                              currenttopic: topic,
+                              currenthistoryDate: historyDate,
+                              currentImage: image,
+                              currentMembers: currentMembers,
+                              currentDescription: description,
+                              allMembers: members),
                         ),
                       );
                     },
@@ -107,13 +90,13 @@ class _GenerationListViewState extends State<GenerationListView> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      color: const Color.fromRGBO(255, 255, 255, 0.9),
+                      color: Color.fromRGBO(255, 255, 255, 0.9),
                       child: ListTile(
                           title: Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Text(name),
+                            child: Text(topic),
                           ),
-                          subtitle: Text(type),
+                          subtitle: Text(historyDate),
                           trailing: _isDeleted
                               ? const CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
@@ -142,7 +125,7 @@ class _GenerationListViewState extends State<GenerationListView> {
                                           ),
                                         ),
                                         description: const Text(
-                                          "This action cannot be undone. Your selected data will be removed permanently.",
+                                          "This action cannot be undone. Your selected history record will be removed permanently.",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 16.0,
@@ -152,24 +135,21 @@ class _GenerationListViewState extends State<GenerationListView> {
                                         buttonCancelColor: Colors.black12,
                                         buttonOkColor: Colors.blueAccent,
                                         onOkButtonPressed: () async {
-                                          await Generation.deleteGeneration(
-                                              docId: docId);
-                                          Navigator.pop(context);
-                                          Provider.of<GenerationProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .alert(
-                                                  title: 'Successfully Deleted',
-                                                  body:
-                                                      'Generation has been deleted successfully',
-                                                  context: context);
-                                        },
-                                        onCancelButtonPressed: () {
-                                          Navigator.pop(context);
+                                          await History.deleteHistory(historyID: historyID);
+                                          setState(() {
+                                            _isDeleted = false;
+                                            Navigator.pop(context);
+                                            Provider.of<MemberProvider>(context,
+                                                listen: false)
+                                                .alert(
+                                                title: 'Successfully Deleted',
+                                                body:
+                                                'Record has been successfully deleted',
+                                                context: context);
+                                          });
                                         },
                                       ),
                                     );
-
                                     setState(() {
                                       _isDeleted = false;
                                     });

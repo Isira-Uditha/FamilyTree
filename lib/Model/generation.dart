@@ -24,6 +24,7 @@ class Generation {
     required this.type,
   });
 
+  //Add a generation
   static Future<void> addGeneration(Generation generation) async {
     DocumentReference documentReference =
         _mainCollection.doc('1').collection('generation').doc();
@@ -59,12 +60,14 @@ class Generation {
         .catchError((e) => print(e));
   }
 
+  //Read all generation records in the database
   static Stream<QuerySnapshot> readGenerations() {
     CollectionReference memberCollection =
         _mainCollection.doc('1').collection('generation');
     return memberCollection.snapshots();
   }
 
+  //Delete a generation
   static Future<void> deleteGeneration({
     required String docId,
   }) async {
@@ -77,6 +80,7 @@ class Generation {
         .catchError((e) => print(e));
   }
 
+  //Update an existing generation
   static Future<void> updateGeneration(Generation generation) async {
     DocumentReference documentReference =
         _mainCollection.doc('1').collection('generation').doc(generation.docId);
@@ -112,6 +116,7 @@ class Generation {
         .catchError((e) => print(e));
   }
 
+  //Find the standard generation type according to the selected members' birth years
   static GenerationType findGeneration(List<Member> members) {
     final List<dynamic> birthYears = [];
     final List<GenerationType> generationTypes = [];
