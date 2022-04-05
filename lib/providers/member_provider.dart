@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_tree/Model/member.dart';
-import 'package:family_tree/screens/family/member/member_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:giff_dialog/giff_dialog.dart';
 
 class MemberProvider extends ChangeNotifier {
@@ -11,11 +8,8 @@ class MemberProvider extends ChangeNotifier {
 
   Set<Member> get member => _members;
 
-  void addMember(Member member) async {
-    await Member.addMember(member);
-    notifyListeners();
-  }
-
+  //Reference to the https://viveky259259.medium.com/age-calculator-in-flutter-97853dc8486f,
+  //this is required to calculate the age of the person by getting the date of birth as the input parameter
   calculateAge(DateTime birthDate) {
     DateTime currentDate = DateTime.now();
     int age = currentDate.year - birthDate.year;
@@ -34,6 +28,7 @@ class MemberProvider extends ChangeNotifier {
     return age;
   }
 
+  //Input field decorations
   InputDecoration inputDecoration({String? pIcon}) {
     return InputDecoration(
       labelStyle: const TextStyle(color: Colors.yellowAccent),
@@ -69,10 +64,7 @@ class MemberProvider extends ChangeNotifier {
     );
   }
 
-  readMembers() async {
-    return Member.readMembers();
-  }
-
+  //Member - pop up window
   Future<void> popMemberDetails({
     required Member member,
     required Widget image,
