@@ -59,6 +59,7 @@ class _EditMemberFormState extends State<EditMemberForm> {
     _descriptionController.text = widget.member.description;
   }
 
+  //Select an image from the gallery
   Future getImage() async {
     final ImagePicker _picker = ImagePicker();
     final image = await _picker.pickImage(source: ImageSource.gallery);
@@ -68,6 +69,8 @@ class _EditMemberFormState extends State<EditMemberForm> {
     });
   }
 
+  //Reference to the https://ptyagicodecamp.github.io/uploading-image-to-firebase-storage-in-flutter-app-android-ios.html
+  //This function is required to create a firestore instance and upload the selected image to the firestore database
   Future uploadImage() async {
     String fileName = basename(_image!.path);
     FirebaseStorage storage = FirebaseStorage.instance;
@@ -84,6 +87,7 @@ class _EditMemberFormState extends State<EditMemberForm> {
     return await FirebaseStorage.instance.ref().child(image).getDownloadURL();
   }
 
+  //Retrieve the image from firestore
   Future<Widget> _getImage(BuildContext context, String image) async {
     Image m = const Image(
       image: AssetImage('assets/user.png'),
@@ -102,6 +106,7 @@ class _EditMemberFormState extends State<EditMemberForm> {
     return m;
   }
 
+  //Initializing the relationship types
   final List<String> relationships = [
     'My Self',
     'Father',

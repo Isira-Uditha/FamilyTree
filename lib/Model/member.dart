@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('family');
@@ -23,7 +22,7 @@ class Member {
     required this.image,
   });
 
-
+  //Add a new member to the firebase
   static Future<void> addMember(Member member) async {
     DocumentReference documentReference =
         _mainCollection.doc('1').collection('member').doc();
@@ -43,20 +42,24 @@ class Member {
         .catchError((e) => print(e));
   }
 
+  //Fetch all member from the firebase
   static Stream<QuerySnapshot> readMembers() {
     CollectionReference memberCollection =
         _mainCollection.doc('1').collection('member');
     return memberCollection.snapshots();
   }
 
+  //Fetch all members by relationship type
   static Stream<QuerySnapshot> readByRelationship(String relationship) {
     return _mainCollection.doc('1').collection('member').where("relationship", isEqualTo: relationship).snapshots();
   }
 
+  //Fetch all siblings by relationship type
   static Stream<QuerySnapshot> readSiblings(String relationship) {
     return _mainCollection.doc('1').collection('member').where("relationship", isEqualTo: relationship).snapshots();
   }
 
+  //Update the member record
   static Future<void> updateMember(Member member) async {
     DocumentReference documentReference =
     _mainCollection.doc('1').collection('member').doc(member.docId);
@@ -76,6 +79,7 @@ class Member {
         .catchError((e) => print(e));
   }
 
+  //Delete the member record
   static Future<void> deleteMember({
     required String docId,
   }) async {
