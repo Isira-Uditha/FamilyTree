@@ -52,6 +52,8 @@ class _AddHistoryFormState extends State<AddHistoryForm> {
     });
   }
 
+  //Reference to the https://ptyagicodecamp.github.io/uploading-image-to-firebase-storage-in-flutter-app-android-ios.html
+  //This function is required to create a firestore instance and  upload the selected history image to the firestore database
   Future uploadImage() async {
     String fileName = basename(_image!.path);
     FirebaseStorage storage = FirebaseStorage.instance;

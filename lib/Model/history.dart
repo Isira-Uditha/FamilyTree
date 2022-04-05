@@ -21,6 +21,7 @@ class History {
     required this.image,
   });
 
+  //This is for add family history information
   static Future<void> addHistory(History history) async {
     DocumentReference documentReference =
     _mainCollection.doc('1').collection('history').doc();
@@ -51,6 +52,7 @@ class History {
     return historyCollection.snapshots();
   }
 
+  //This is to update family history information
   static Future<void> updateHistory(History history) async {
     DocumentReference documentReference =
     _mainCollection.doc('1').collection('history').doc(history.historyID);
@@ -75,6 +77,7 @@ class History {
         .catchError((e) => print(e));
   }
 
+  //This is to delete family history information
   static Future<void> deleteHistory({
     required String historyID,
   }) async {
