@@ -10,12 +10,12 @@ Technologies
 - Flutter of front-end development 
 - Firebase and Firestore as the database
   
-<img src="(https://user-images.githubusercontent.com/61306132/169030310-048cebb8-6d54-4239-ad8a-76fb931e5507.png)" width="150">
+<img src="https://user-images.githubusercontent.com/61306132/169030310-048cebb8-6d54-4239-ad8a-76fb931e5507.png" width="150">
 <div style="float-left">
-<img src=(https://user-images.githubusercontent.com/61306132/169030486-891728bc-0ce6-42c8-a4df-32c76a314f3b.png)" width="150">
-<img src="(https://user-images.githubusercontent.com/61306132/169030564-12484eb6-9fb1-483a-9f79-c269ceb439d5.png)" width="150">
+<img src="https://user-images.githubusercontent.com/61306132/169030486-891728bc-0ce6-42c8-a4df-32c76a314f3b.png" width="150">
+<img src="https://user-images.githubusercontent.com/61306132/169030564-12484eb6-9fb1-483a-9f79-c269ceb439d5.png" width="150">
 </div>
 <div style="float-left">
-<img src="(https://user-images.githubusercontent.com/61306132/169030624-a73b7e27-b9e2-42e6-b2a1-6b0482807b39.png)" width="150">
+<img src="https://user-images.githubusercontent.com/61306132/169030624-a73b7e27-b9e2-42e6-b2a1-6b0482807b39.png" width="150">
 <img src="https://user-images.githubusercontent.com/61306132/169030768-83a2117c-8f94-47f9-9ba0-79fd18dca9fb.png" width="150">
 </div>
